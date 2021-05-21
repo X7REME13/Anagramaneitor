@@ -42,7 +42,7 @@ int main(){
 			if(compararCadenas(palabra,anagrama)==0){
 				reintentar = reintentarMenu(intentos);
 			}
-			else{			    
+			else{
                 if(es_anagrama(palabra,anagrama)==0){
                     printf("\n >> BIEN HECHO! Sumas un punto Jugador 2\n");
                     puntosJ2++;
@@ -91,13 +91,13 @@ int es_anagrama(char palabra[MAX],char anagrama[MAX]){
 	if(encontre==lenPalabra){
 		return 0;
 	}else{
-		return -1;	
-	}	
+		return -1;
+	}
 }
 
 void duplicar_cadena(char cad1[], char cad2[])
 {
-	
+
     int a=0, rdo=0;
     for (a;cad1[a]!='\0';a++)
     {

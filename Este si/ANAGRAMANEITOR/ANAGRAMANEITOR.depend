@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1621631082 source:c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\main.c
+1621635827 source:c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<time.h>
 
