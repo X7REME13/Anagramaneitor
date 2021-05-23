@@ -5,6 +5,35 @@
 
 //arbol v
 
+int cargar_diccionario(char diccionario[][]){
+	FILE *dicc;
+	dicc = fopen("dicc.txt","rt");
+	if(dicc) return 1;	
+	char c;
+	int palabra = 0;
+	int character = 0;
+	
+	while((c = fgetc(dicc)) != EOF && palabra < MAX){	
+		if(c == '\n'){
+			palabra++;
+			character = 0;
+		}
+		else{
+			diccionario[palabra][character] = c;
+			character++;		
+		}		
+	}	
+	return 0;
+}
+
+
+int buscar_palabra(char diccionario[][], char palabra[]){
+	while(strcmp(consulta,diccionario[i])!=0 && i < MAX) i++;
+	if(i != MAX) return 0;
+	else return 1;	
+}
+
+
 int main(){
 	FILE *dicc;
 	dicc = fopen("dicc.txt","rt");
