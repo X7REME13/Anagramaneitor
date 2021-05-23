@@ -3,35 +3,40 @@
 #include <string.h>
 #include <time.h>
 #define LMAX 100
-
+#define TDICC 30000
 
 int continuar(int partidas);
 int reintentarMenu(int intentos);
-void ingresar_palabra(char palabra[]);
 int reintentar_menu(int intentos);
 int es_anagrama(char cad1[], char cad2[]);
 void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int partidas);
 int es_texto(char cad[]);
-void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2);
+void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][25]);
+void ingresar_nombre(char palabra[]);
+void ingresar_palabra(char palabra[], char diccionario[][25]);
+int cargar_diccionario(char diccionario[][25]);
+int buscar_palabra(char diccionario[][25], char palabra[]);
 
 
 int main()
 {
     int partidas=0;
     int puntosj1=0,puntosj2=0;
-    char nombrej1[LMAX],nombrej2[LMAX];
+    char nombrej1[LMAX],nombrej2[LMAX],diccionario[TDICC][25];
+    cargar_diccionario(diccionario);
+
     printf("Jugador 1 ingrese su nombre: ");
-    ingresar_palabra(nombrej1);
+    ingresar_nombre(nombrej1);
     printf("\n\nJugador 2 ingrese su nombre: ");
-    ingresar_palabra(nombrej2);
+    ingresar_nombre(nombrej2);
 
     srand(time(NULL));
     int moneda=rand()%2;
 
     do{ //partida
         partidas++;
-        if(partidas%2==moneda)partida(nombrej1,&puntosj1,nombrej2,&puntosj2);
-        else partida(nombrej2,&puntosj2,nombrej1,&puntosj1);
+        if(partidas%2==moneda)partida(nombrej1,&puntosj1,nombrej2,&puntosj2,diccionario);
+        else partida(nombrej2,&puntosj2,nombrej1,&puntosj1,diccionario);
         printf("Puntos %s: %i\n\nPuntos %s: %i",nombrej1,puntosj1,nombrej2,puntosj2);
     }while(continuar(partidas)==1);
     game_over(nombrej1,puntosj1,nombrej2,puntosj2,partidas);
@@ -61,7 +66,7 @@ int reintentar_menu(int intentos){
 	return respuesta;
 }
 
-void ingresar_palabra(char palabra[])
+void ingresar_nombre(char palabra[])
 {
     fflush(stdin);
     gets(palabra);
@@ -72,6 +77,67 @@ void ingresar_palabra(char palabra[])
         gets(palabra);
     }
 
+}
+
+void ingresar_palabra(char palabra[], char diccionario[][25])
+{
+    fflush(stdin);
+    gets(palabra);
+    while (buscar_palabra(diccionario,palabra)!=0)
+    {
+        printf("ERROR\nIngrese una palabra valida: ");
+        fflush(stdin);
+        gets(palabra);
+    }
+
+}
+
+int cargar_diccionario(char diccionario[][25]){
+    FILE *dicc;
+    dicc = fopen("dicc.txt","rt");
+    if(dicc) return 1;
+    char c;
+    int palabra = 0;
+    int character = 0;
+
+    while((c = fgetc(dicc)) != EOF && palabra < TDICC){
+        if(c == '\n'){
+            palabra++;
+            character = 0;
+        }
+        else{
+            diccionario[palabra][character] = c;
+            character++;
+        }
+    }
+    fclose(dicc);
+    return 0;
+}
+
+int buscar_palabra(char dicci[][25], char palabra[]){
+    FILE *dicc;
+    dicc = fopen("dicc.txt","rt");
+    char diccionario[TDICC][25];
+    char c;
+    int palab = 0;
+    int character = 0;
+
+    while((c = fgetc(dicc)) != EOF && palab < TDICC){
+        if(c == '\n'){
+            palab++;
+            character = 0;
+        }
+        else{
+            diccionario[palab][character] = c;
+            character++;
+        }
+    }
+    fclose(dicc);
+    int i = 0;
+    while(strcmp(palabra,diccionario[i])!=0 && i < TDICC) i++;
+    printf("%i",i);
+    if(i != TDICC) return 0;
+    else return 1;
 }
 
 int es_texto(char cad[])
@@ -126,19 +192,19 @@ void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int par
     }
 }
 
-void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2)
+void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][25])
 {
 
     int intentos=0;
     int reintentar=1;
     char palabraj1[LMAX],palabraj2[LMAX];
     printf("%s ingrese una palabra: ",nombrej1);
-    ingresar_palabra(palabraj1);
+    ingresar_palabra(palabraj1,diccionario);
 
     do{//intentos
         intentos++;
         printf("%s ingrese una palabra: ",nombrej2);
-        ingresar_palabra(palabraj2);
+        ingresar_palabra(palabraj2,diccionario);
         if (strcmp(palabraj1,palabraj2)==0)reintentar=reintentar_menu(intentos);
         else {
             if (es_anagrama(palabraj1,palabraj2)==0){
