@@ -11,7 +11,7 @@ void ingresar_palabra(char palabra[]);
 int reintentar_menu(int intentos);
 int es_anagrama(char cad1[], char cad2[]);
 void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int partidas);
-int es_palabra(char cad[]);
+int es_texto(char cad[]);
 void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2);
 
 
@@ -65,7 +65,7 @@ void ingresar_palabra(char palabra[])
 {
     fflush(stdin);
     gets(palabra);
-    while (es_palabra(palabra)!=0)
+    while (es_texto(palabra)!=0)
     {
         printf("ERROR\nIngrese una palabra usando solo letras: ");
         fflush(stdin);
@@ -74,7 +74,7 @@ void ingresar_palabra(char palabra[])
 
 }
 
-int es_palabra(char cad[])
+int es_texto(char cad[])
 {
     int lcad = strlen(cad), i=0,cont=0,rta=0;
     strlwr(cad);
@@ -157,3 +157,4 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2)
     else *puntosj2=*puntosj2+1;
 
 }
+
