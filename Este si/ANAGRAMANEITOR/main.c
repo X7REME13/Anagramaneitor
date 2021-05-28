@@ -3,7 +3,8 @@
 #include <string.h>
 #include <time.h>
 #define LMAX 100
-#define TDICC 30000
+#define TDICC 81000
+#define TPALABRA 25
 
 int continuar(int partidas);
 int reintentarMenu(int intentos);
@@ -11,19 +12,22 @@ int reintentar_menu(int intentos);
 int es_anagrama(char cad1[], char cad2[]);
 void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int partidas);
 int es_texto(char cad[]);
-void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][25]);
+void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA]);
 void ingresar_nombre(char palabra[]);
-void ingresar_palabra(char palabra[], char diccionario[][25]);
-int cargar_diccionario(char diccionario[][25]);
-int buscar_palabra(char diccionario[][25], char palabra[]);
+void ingresar_palabra(char palabra[], char diccionario[][TPALABRA]);
+int cargar_diccionario(char diccionario[][TPALABRA]);
+int buscar_palabra(char diccionario[][TPALABRA], char palabra[]);
 
 
 int main()
 {
     int partidas=0;
     int puntosj1=0,puntosj2=0;
-    char nombrej1[LMAX],nombrej2[LMAX],diccionario[TDICC][25];
-    cargar_diccionario(diccionario);
+    char nombrej1[LMAX],nombrej2[LMAX];
+    
+	char diccionario[TDICC][TPALABRA];
+	
+    if(cargar_diccionario(diccionario)) return 0; 
 
     printf("Jugador 1 ingrese su nombre: ");
     ingresar_nombre(nombrej1);
@@ -41,6 +45,7 @@ int main()
     }while(continuar(partidas)==1);
     game_over(nombrej1,puntosj1,nombrej2,puntosj2,partidas);
 }
+
 int continuar(int partidas){
 	if(partidas >= 5) return 0;
 	int respuesta;
@@ -68,7 +73,7 @@ int reintentar_menu(int intentos){
 
 void ingresar_nombre(char palabra[])
 {
-    fflush(stdin);
+	fflush(stdin);
     gets(palabra);
     while (es_texto(palabra)!=0)
     {
@@ -79,7 +84,7 @@ void ingresar_nombre(char palabra[])
 
 }
 
-void ingresar_palabra(char palabra[], char diccionario[][25])
+void ingresar_palabra(char palabra[], char diccionario[][TPALABRA])
 {
     fflush(stdin);
     gets(palabra);
@@ -92,10 +97,10 @@ void ingresar_palabra(char palabra[], char diccionario[][25])
 
 }
 
-int cargar_diccionario(char diccionario[][25]){
+int cargar_diccionario(char diccionario[][TPALABRA]){
     FILE *dicc;
     dicc = fopen("dicc.txt","rt");
-    if(dicc) return 1;
+    if(!dicc) return 1;
     char c;
     int palabra = 0;
     int character = 0;
@@ -111,30 +116,34 @@ int cargar_diccionario(char diccionario[][25]){
         }
     }
     fclose(dicc);
+    printf("Diccionario dentro: %s", diccionario[1]);
     return 0;
 }
 
-int buscar_palabra(char dicci[][25], char palabra[]){
-    FILE *dicc;
-    dicc = fopen("dicc.txt","rt");
-    char diccionario[TDICC][25];
-    char c;
-    int palab = 0;
-    int character = 0;
-
-    while((c = fgetc(dicc)) != EOF && palab < TDICC){
-        if(c == '\n'){
-            palab++;
-            character = 0;
-        }
-        else{
-            diccionario[palab][character] = c;
-            character++;
-        }
-    }
-    fclose(dicc);
+int buscar_palabra(char dicci[][TPALABRA], char palabra[]){
+   
+    //---------------------------------------------------
+//    FILE *dicc;
+//    dicc = fopen("dicc.txt","rt");
+//    char diccionario[TDICC][TPALABRA];
+//    char c;
+//    int palab = 0;
+//    int character = 0;
+//
+//    while((c = fgetc(dicc)) != EOF && palab < TDICC){
+//        if(c == '\n'){
+//            palab++;
+//            character = 0;
+//        }
+//        else{
+//            diccionario[palab][character] = c;
+//            character++;
+//        }
+//    }
+//    fclose(dicc);
+    //---------------------------------------------------
     int i = 0;
-    while(strcmp(palabra,diccionario[i])!=0 && i < TDICC) i++;
+    while(strcmp(palabra,dicci[i])!=0 && i < TDICC) i++;
     printf("%i",i);
     if(i != TDICC) return 0;
     else return 1;
@@ -192,7 +201,7 @@ void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int par
     }
 }
 
-void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][25])
+void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA])
 {
 
     int intentos=0;
