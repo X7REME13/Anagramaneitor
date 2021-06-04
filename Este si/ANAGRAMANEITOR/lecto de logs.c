@@ -5,7 +5,7 @@
 
 
 int main(){
-	struct Log{
+	struct log{
 		char anagrama[24];
 		int intentos;
 		int ganador;
@@ -17,36 +17,21 @@ int main(){
 	int ganador;
 	int jugador_empieza;
 	
+	//struct log arrayLog[1000];
 	
+	FILE* f = fopen("log.dat","rb");
 	
-	FILE* Archivaldo = fopen("log.dat","rb");
+	int i = 0;
+	fread(&log_partida, sizeof(struct log), 1, f);
+	while (!feof(f))
+	{ 
+		printf("Vuelta: %d\n", i);
+		printf("%s, %d, %d, %d\n\n",log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
+		i++;
+		fread(&log_partida, sizeof(struct log), 1, f);
+	}
 
-    fread(log_partida, sizeof(log_partida), 1, Archivaldo);
-    fread(&intentos, sizeof(int), 1, Archivaldo);
-    printf("%s",anagrama);
-//    
-//    Nuevo->Id_Doctor=id_doc; ///copies data in structure
-//    strcpy(Nuevo -> Nombre , nombre_doc);
-//    strcpy(Nuevo -> Clave_Acceso, password);
-//    strcpy(Nuevo -> Especialidad, especialida);
-//    Nuevo-> Estado = estado_doc;
-//    printf("---------------------------------\n"); //display info
-//    printf("ID: %d\n", id_doc);
-//    printf("\nDoctor: ");
-//    puts(nombre_doc);
-//    printf("\nPassword: ");
-//    puts(password);
-//    printf("\nEspecialidad: ");
-//    puts(especialida);
-//    printf("\nEstado: ");
-//    if(estado_doc==1)
-//        puts("Activo\n");
-//    else
-//        puts("Inactivo\n");
-//    Nuevo-> next = *Inicio;
-//    *Inicio = Nuevo
-//	
-	fclose(Archivaldo);
+	fclose(f);
 	
 	
 	

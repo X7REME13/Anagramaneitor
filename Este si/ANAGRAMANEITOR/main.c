@@ -49,13 +49,8 @@ int cargar_diccionario(char diccionario[][TPALABRA]);
 int buscar_palabra(char diccionario[][TPALABRA], char palabra[]);
 void juego();
 void imprimir_terminator(int x, int y);
-//void crear_log(char anagrama[], int intentos, int ganador, int jugador_empieza);
+void crear_log(char anagrama[], int intentos, int ganador, int jugador_empieza);
 
-int borde[3][20]={
-	{1,7,7,2,2,2,2,2,2,2,2,2,2,3,0,0,0,0},
-	{4,8,8,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0},
-	{5,7,7,2,2,2,2,2,2,2,2,2,2,6,0,0,0,0}	
-};
 
 void paintearD (int unit){
 	
@@ -245,7 +240,7 @@ void ingresar_nombre(char palabra[])
     gets(palabra);
     while (es_texto(palabra)!=0)
     {
-        printf("ERROR\nIngrese una palabra usando solo letras: ");
+        printf("ERROR\n« Ingrese una palabra usando solo letras: ");
         fflush(stdin);
         gets(palabra);
     }
@@ -285,35 +280,31 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     	intentos = -1;
 	} 
     
-    //crear_log(palabraj1,intentos,ganoj2, jugador_empieza);
+    crear_log(palabraj1,intentos,ganoj2, jugador_empieza);
     
-    
-    
-    
-
 }
 
-/*void crear_log(char anagrama[], int intentos, int ganador, int jugador_empieza)
-{
-	struct log{
+struct log{
 		char anagrama[TPALABRA];
 		int intentos;
 		int ganador;
 		int jugador_empieza;
-	} log_partida;
-	
-//	struct log l = {anagrama,intentos, ganador, jugador_empieza};
+};
 
-	//log_partida.anagrama = anagrama;
+void crear_log(char anagrama[], int intentos, int ganador, int jugador_empieza)
+{
+	struct log log_partida;
+
+	strcpy(log_partida.anagrama, anagrama);
+	printf("\n\n ESTOY GUARDANDO EL ARCHIVO\n", intentos);
 	log_partida.intentos = intentos;
 	log_partida.ganador = ganador;
 	log_partida.jugador_empieza = jugador_empieza;
-//	
-	
-	FILE* f = fopen("log.dat","wb");
+
+	FILE* f = fopen("log.dat","ab");
 	fwrite(&log_partida, sizeof(struct log), 1, f);	
 	fclose(f);
-}*/
+}
 
 
 int continuar()
