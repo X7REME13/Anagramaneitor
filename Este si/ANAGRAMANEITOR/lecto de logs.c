@@ -6,6 +6,7 @@
 
 int main(){
 	struct log{
+		int idJuego;
 		char anagrama[24];
 		int intentos;
 		int ganador;

@@ -9,31 +9,6 @@
 #define TDICC 80500
 #define TPALABRA 24
 
-//------------COLORES----------------
-#define NEGRO 0X0000
-#define AZUL 0X0001
-#define VERDE 0X0002
-#define CIAN 0X0003
-#define ROJO 0X0004
-#define MAGENTA 0X0005
-#define MARRON 0X0006
-#define GRIS_CLARO 0X0007
-#define GRIS_OSCURO 0X0008
-#define AZUL_INTENSO 0X0009
-#define VERDE_INTENSO 0X000A
-#define VERDEI 0X000A
-#define CIAN_INTENSO 0X000B
-#define ROJO_INTENSO 0X000C
-#define ROJOI 0X000C
-#define MAGENTA_INTENSO 0X000D
-#define MAGENTAI 0X000D
-#define AMARILLO_INTENSO 0X000E
-#define AMARILLOI 0X000E
-#define JOHI 0X000E
-#define BLANCO_INTENSO 0X000F
-#define BLANCO 0X000F
-//---------------------------------
-
 #include "VIDEO.cpp"
 
 int continuar();
@@ -176,6 +151,7 @@ int menu()
 			return 99;
 		
 	}
+	return 0;
 }
 
 void juego()
@@ -296,7 +272,7 @@ void crear_log(char anagrama[], int intentos, int ganador, int jugador_empieza)
 	struct log log_partida;
 
 	strcpy(log_partida.anagrama, anagrama);
-	printf("\n\n ESTOY GUARDANDO EL ARCHIVO\n", intentos);
+	printf("\n\n ESTOY GUARDANDO EL ARCHIVO\n");
 	log_partida.intentos = intentos;
 	log_partida.ganador = ganador;
 	log_partida.jugador_empieza = jugador_empieza;

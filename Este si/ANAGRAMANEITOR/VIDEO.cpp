@@ -1,5 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
+
+//------------COLORES----------------
 #define NEGRO 0X0000
 #define AZUL 0X0001
 #define VERDE 0X0002
@@ -22,7 +24,7 @@
 #define JOHI 0X000E
 #define BLANCO_INTENSO 0X000F
 #define BLANCO 0X000F
-void gotoxy(int, int);
+//---------------------------------
 
 //----------------------------------------------------------------------------
 //------- FUNCIONES RESERVADAS PARA VIDEO ------------------------------------
@@ -44,7 +46,6 @@ void setD() {
 
 void setT(int texto) { 
     HANDLE hCon;
-    int numero;
     hCon=GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute (hCon,texto);
 }
@@ -128,7 +129,7 @@ void paintU(int thing,int color){
 void cuadro(const char *text,int x,int y){
 	int top[3]={1,4,5};
 	int midS[3]={2,0,2,};
-	int midL[3]={7,8,7,};	
+	//int midL[3]={7,8,7,};	
 	int bot[3]={3,4,6,};
 	
 	int len=strlen(text) + 1;
@@ -146,7 +147,7 @@ void cuadro(const char *text,int x,int y){
 void cuadroT(const char *text,int x,int y,int ColorBorde){
 	int top[3]={1,4,5};
 	int midS[3]={2,0,2,};
-	int midL[3]={7,8,7,};	
+	//int midL[3]={7,8,7,};	
 	int bot[3]={3,4,6,};
 	
 	int len=strlen(text) + 1;
@@ -164,7 +165,7 @@ void cuadroT(const char *text,int x,int y,int ColorBorde){
 void cuadroTF(const char *text,int x,int y,int ColorBorde,int ColorTexto){
 	int top[3]={1,4,5};
 	int midS[3]={2,0,2,};
-	int midL[3]={7,8,7,};	
+	//int midL[3]={7,8,7,};	
 	int bot[3]={3,4,6,};
 	
 	int len=strlen(text) + 1;
