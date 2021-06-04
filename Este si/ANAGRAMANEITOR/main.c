@@ -12,9 +12,30 @@
 #define FILE_LOG "log.dat"
 #define FILE_DICC "dicc.txt"
 
-
 #include "VIDEO.cpp"
 
+struct juego{
+	int idJuego;
+	int partidas;
+    int puntosEscritor;
+	int puntosAdivinador;
+    char nombreEscritor[LMAX];
+	char nombreAdivinador[LMAX];
+	int moneda;
+};
+
+struct log{
+	int idJuego;
+	char anagrama[TPALABRA];
+	char nombreEscritor[TPALABRA];
+	char nombreAdivinador[TPALABRA];
+	int intentos;
+	int ganador;
+	int jugador_empieza;
+};
+
+void imprimir_terminator(int x, int y);
+void imprimir_terminator2(int x, int y);
 int continuar();
 int reintentarMenu(int intentos);
 int reintentar_menu(int intentos);
@@ -26,17 +47,34 @@ void ingresar_nombre(char palabra[]);
 void ingresar_palabra(char palabra[], char diccionario[][TPALABRA]);
 int cargar_diccionario(char diccionario[][TPALABRA]);
 int buscar_palabra(char diccionario[][TPALABRA], char palabra[]);
-void juego();
+void juego(struct juego);
 void imprimir_terminator(int x, int y);
-void crear_log(int,char anagrama[], int intentos, int ganador, int jugador_empieza);
-
+void crear_log(int,char anagrama[], char nombrej1[], char nombrej2[], int intentos, int ganador, int jugador_empieza);
+void mostrarEstadisticas();
+struct juego setearData();
+struct juego cargadorPartida();
+void bienvenida();
 
 
 int main() // --------------------MAIN------------------------
-{
+{	
+
 	SetConsoleTitle("ANAGRAMANEITOR");
+	//bienvenida();
 	do{
 	}while(menu() != 99);
+}
+
+
+void bienvenida(){
+	imprimir_terminator2(10,0);
+	int i;
+	for(i = 0; i <  25; i++){
+		
+		imprimir_terminator(10+(i*2), 0);
+		gotoxy(0,0);
+		Sleep(80);		
+	}
 }
 
 void imprimir_terminator(int x, int y){
@@ -66,17 +104,63 @@ void imprimir_terminator(int x, int y){
 		{0,0,0,0,72,0,0,72,0,0,0,0,0,72,0,0,72,0,0,0,0},
 		{0,0,0,71,72,73,73,73,73,0,0,0,73,73,73,73,72,72,0,0,0},
 		{0,0,0,72,72,72,72,72,72,73,73,73,72,72,72,72,72,72,0,0,0},
-		{73,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,73},
-		{72,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,72},
+		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
+		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
 		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}	
 	};
 	int iniX = x;
 	int iniY = y;
-	
+	gotoxy(x, y);
 	for (y=0;y<30;y++ ){
 		
 		for (x=0;x<24;x++){
+			if (x==0 && y>0) gotoxy(iniX,y+iniY);
 			
+			paintearD(terminator[y][x]);
+			 
+		}
+	}
+	
+}
+
+void imprimir_terminator2(int x, int y){
+	int terminator[30][24]=
+	{
+		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
+		{0,0,0,0,0,72,72,72,72,72,72,72,72,72,72,72,0,0,0,0,0},
+		{0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,72,73,72,72,72,73,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,73,72,72,72,73,72,72,72,0,0,0,0,0},
+		{0,0,0,0,73,72,72,72,72,73,72,73,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,73,72,71,72,72,73,73,73,72,72,73,72,73,0,0,0,0},
+		{0,0,0,0,73,72,71,72,72,72,73,72,72,72,73,72,73,0,0,0,0},
+		{0,0,0,0,71,72,0,44,0,0,72,0,0,44,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,0,0,72,72,72,72,72,0,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,72,72,0,72,0,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,72,0,72,0,72,72,72,72,0,0,0,0,0},
+		{0,0,0,0,71,0,72,0,72,72,72,72,72,0,72,0,73,0,0,0,0},
+		{0,0,0,0,71,72,0,0,71,72,71,72,71,0,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,0,83,154,83,154,83,0,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,0,154,83,154,83,154,0,72,72,0,0,0,0,0},
+		{0,0,0,0,71,72,72,72,72,72,72,72,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,0,72,0,72,0,72,72,72,0,0,0,0,0},
+		{0,0,0,0,72,0,0,72,72,72,0,72,72,72,0,0,72,0,0,0,0},
+		{0,0,0,0,72,0,0,0,72,72,72,72,72,0,0,0,72,0,0,0,0},
+		{0,0,0,0,72,0,0,72,0,0,0,0,0,72,0,0,72,0,0,0,0},
+		{0,0,0,71,72,73,73,73,73,0,0,0,73,73,73,73,72,72,0,0,0},
+		{0,0,0,72,72,72,72,72,72,73,73,73,72,72,72,72,72,72,0,0,0},
+		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
+		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
+		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}	
+	};
+	int iniX = x;
+	int iniY = y;
+	gotoxy(x, y);
+	for (y=0;y<30;y++ ){
+		
+		for (x=0;x<24;x++){
+			Sleep(1);
 			if (x==0 && y>0) gotoxy(iniX,y+iniY);
 			
 			paintearD(terminator[y][x]);
@@ -110,19 +194,23 @@ int menu()
 	gotoxy(40,27);
 	scanf("%d",&opcion);
 	system("cls");
+	struct juego data;
 	switch(opcion)
 	{
 		case 1:
-			juego();
+			data = setearData();
+			juego(data);
 			break;
 		case 2:
 			printf("Instrucciones");
 			break;
 		case 3:
-			printf("Retomar partida");
+			data = cargadorPartida();
+			juego(data);
 			break;
 		case 4:
-			printf("Logs");
+			mostrarEstadisticas();
+			system("pause");
 			break;
 		case 5:
 			printf("Creditos");
@@ -134,36 +222,47 @@ int menu()
 	return 0;
 }
 
-void juego()
-{
+
+struct juego setearData(){
 	
-	int partidas=0;
-    int puntosj1=0,puntosj2=0;
-    char nombrej1[LMAX]="Jugador 1",nombrej2[LMAX] = "Jugador 2";
+	struct juego data;
+	data.idJuego = setearIdJuego();
+	data.partidas=0;
+    data.puntosEscritor=0;
+	data.puntosAdivinador=0;
+    strcpy(data.nombreEscritor,"Jugador 1");
+	strcpy(data.nombreAdivinador,"Jugador 2");
+	srand(time(NULL));
+    data.moneda=rand()%2;
     
+//	printf("Jugador 1 ingrese su nombre: ");
+//    ingresar_nombre(data.nombreEscritor);
+//    printf("\n\nJugador 2 ingrese su nombre: ");
+//    ingresar_nombre(data.nombreAdivinador);
+
+	return data;	
+}
+
+
+void juego(struct juego data)
+{
 	char diccionario[TDICC][TPALABRA];
 	
     if(cargar_diccionario(diccionario)) return; 
-
-//    printf("Jugador 1 ingrese su nombre: ");
-//    ingresar_nombre(nombrej1);
-//    printf("\n\nJugador 2 ingrese su nombre: ");
-//    ingresar_nombre(nombrej2);
-
-    srand(time(NULL));
-    int moneda=rand()%2;
-    int idJuego = setearIdJuego();
-
+    
+	int jugador_empieza = data.moneda;
     do{ //partida
-        partidas++;
+        data.partidas++;
         
-        if(partidas%2!=moneda) partida(nombrej1,&puntosj1,nombrej2,&puntosj2,diccionario, moneda, idJuego);
-        else partida(nombrej2,&puntosj2,nombrej1,&puntosj1,diccionario, moneda, idJuego);
+        if(data.partidas%2!=data.moneda) partida(data.nombreEscritor,&data.puntosEscritor,data.nombreAdivinador,&data.puntosAdivinador,diccionario, jugador_empieza, data.idJuego);
+        else partida(data.nombreAdivinador,&data.puntosAdivinador,data.nombreEscritor,&data.puntosEscritor,diccionario, jugador_empieza, data.idJuego);
         
-		printf("Puntos %s: %i\n\nPuntos %s: %i",nombrej1,puntosj1,nombrej2,puntosj2);
+        if(jugador_empieza) jugador_empieza = 0;
+		else jugador_empieza = 1;
+		printf("Puntos %s: %i\n\nPuntos %s: %i",data.nombreEscritor,data.puntosEscritor,data.nombreAdivinador,data.puntosAdivinador);
 		
     }while(continuar()==1);
-    game_over(nombrej1,puntosj1,nombrej2,puntosj2,partidas);
+    game_over(data.nombreEscritor,data.puntosEscritor,data.nombreAdivinador,data.puntosAdivinador,data.partidas);
 }
 
 int cargar_diccionario(char diccionario[][TPALABRA])
@@ -237,30 +336,22 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     	//intentos = -1;
 	} 
     
-    crear_log(idJuego, palabraj1, intentos, ganoj2, jugador_empieza);
+    crear_log(idJuego, palabraj1, nombrej1, nombrej2, intentos, ganoj2, jugador_empieza);
     
 }
 
-struct log{
-	int idJuego;
-	char anagrama[TPALABRA];
-	int intentos;
-	int ganador;
-	int jugador_empieza;
-};
-
-void crear_log(int idJuego, char anagrama[], int intentos, int ganador, int jugador_empieza)
+void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int intentos, int ganador, int jugador_empieza)
 {
 	struct log log_partida;
 	log_partida.idJuego = idJuego;
 	strcpy(log_partida.anagrama, anagrama);
+	strcpy(log_partida.nombreEscritor, nombrej1);
+	strcpy(log_partida.nombreAdivinador, nombrej2);
 	log_partida.intentos = intentos;
-	log_partida.ganador = ganador;
-	
-	
+	log_partida.ganador = ganador;	
 	log_partida.jugador_empieza = jugador_empieza;
 	
-	printf("\n\n%d: %s | %d | %d | %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
+//	printf("\n\n%d: %s | %d | %d | %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
 
 	FILE* f = fopen("log.dat","ab");
 	fwrite(&log_partida, sizeof(struct log), 1, f);	
@@ -276,38 +367,103 @@ int setearIdJuego(){
 	fread(&log_partida, sizeof(struct log), 1, f);
 	fclose(f);
 
-	printf("%d: %s, %d, %d, %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
+//	printf("%d: %s, %d, %d, %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
 	return log_partida.idJuego + 1;	
 	
 }
 
-//void mostrarEstadicticas(){
-//	FILE* f = fopen(FILE_LOG,"rb");
-//	struct log l;
-//	int cantidadPartidas = 0;
-//	int cantidadJuegos = 0;
-//	int cantidadIntentosTotal = 0;
+void mostrarEstadisticas(){
+	FILE* f = fopen(FILE_LOG,"rb");
+	struct log l;
+	int cantidadPartidas = 0;
+	int cantidadJuegos = 0;
+	int cantidadIntentosTotal = 0;
+	int jugadorGanador = 0;
+	int jugadorEmpieza = 0;
+	int juegoActual = -999;
+	fread(&l, sizeof(struct log), 1, f);
+	while (!feof(f))
+	{ 
+		cantidadPartidas++;
+		
+		cantidadIntentosTotal+= l.intentos;
+		
+		jugadorGanador+= l.ganador;
+		
+		if(l.idJuego > cantidadJuegos){
+			cantidadJuegos = l.idJuego;
+			jugadorEmpieza+= l.jugador_empieza;
+		}
+		
+		fread(&l, sizeof(struct log), 1, f);
+	}
+	int hudX = 10;
+	cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
+	
+	printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
+	
+	
+	printf("Estadisticas:\n");
+	printf("Juegos totales: %d\n", cantidadJuegos);
+	printf("Partidas totales: %d\n", cantidadPartidas);
+	printf("Partidas por juego: %f\n",(float) cantidadPartidas / cantidadJuegos );
+	printf("Promedio intento por partida: %f\n",(float) cantidadIntentosTotal / cantidadPartidas);
+	printf("Porcentaje de veces que inicio el Jugador 1: %f\n",(float) (cantidadJuegos - jugadorEmpieza) * 100 / cantidadJuegos);
+	printf("Porcentaje de veces que inicio el Jugador 2: %f\n",(float) jugadorEmpieza * 100 / cantidadJuegos);
+	printf("Porcentaje de veces que gano el Escritor: %f\n",(float) (cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
+	printf("Porcentaje de veces que gano el Adivinador: %f\n",(float)  jugadorGanador * 100 / cantidadPartidas);
+
+	
+	
+}
+
+
+struct juego cargadorPartida(){
+	
+	int idJuego;
+	printf("Ingrese su ID de juego: ");
+	scanf("%d",&idJuego);
+	struct log l;
+	FILE* f = fopen("log.dat","rb");
+	fread(&l, sizeof(struct log), 1, f);
+	while (!feof(f) && l.idJuego != idJuego)
+	{ 
+		printf("LA PUTA MADRE");
+		fread(&l, sizeof(struct log), 1, f);
+	}
+	struct juego data;
+	
+	data.idJuego = l.idJuego;
+	data.moneda = l.jugador_empieza;
+	if(!l.jugador_empieza) {
+		strcpy(data.nombreAdivinador, l.nombreAdivinador);
+		strcpy(data.nombreEscritor, l.nombreEscritor);
+	}
+	else{
+		strcpy(data.nombreAdivinador,l.nombreEscritor);
+		strcpy(data.nombreEscritor, l.nombreAdivinador);
+	}
+	
+	data.partidas = 0;
+	data.puntosEscritor = 0;
+	data.puntosAdivinador = 0;
+	
 //	fread(&l, sizeof(struct log), 1, f);
-//	while (!feof(f))
-//	{ 
-//		//printf("Vuelta: %d\n", i);
-//		//printf("%d: %s, %d, %d, %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
-//		cantidadPartidas++;
-//		
-//		if(l.idJuego > cantidadJuegos) cantidadJuegos = l.idJuego;
-//		
-//		cantidadIntentos+= l.intentos;
-//		
-//		jugadorGanador+= l.ganador;
-//		
-//		jugdadorEmpieza+= l.jugador_empieza;
-//		
-//		fread(&l, sizeof(struct log), 1, f);
-//	}
-//	
-//	
-//	
-//}
+	while (!feof(f))
+	{ 
+		if( l.idJuego == idJuego){
+			if(!l.ganador)	data.puntosEscritor++;
+			else data.puntosAdivinador++;
+			data.partidas++;
+		}	
+		fread(&l, sizeof(struct log), 1, f);
+	}
+
+	fclose(f);
+	
+	return data;
+	
+}
 
 
 int continuar()
