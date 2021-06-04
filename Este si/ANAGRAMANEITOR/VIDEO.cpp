@@ -96,7 +96,6 @@ void paintF(int x, int y, int *figura,int limY,int limX,int color){
 	}
 }
 
-
 void paintU(int thing,int color){
 	
 
@@ -124,7 +123,6 @@ void paintU(int thing,int color){
 		
 	
 }
-
 
 void cuadro(const char *text,int x,int y){
 	int top[3]={1,4,5};
@@ -193,6 +191,31 @@ void itemsNum(int cantItems, int x, int y,int color){
 		inter+=4;		
 	}
 	setD();	
+}
+
+void paintearD (int unit){
+	
+	// numero: 34 
+	// color 3
+	// intensidad / completo? 4 
+	
+	int color = trunc(unit / 10);
+	int intensidad = unit % 10;
+
+	switch (intensidad){
+				
+				case 0: setD(); printf ("  "); setD(); break;
+				
+				case 3: setT(color); printf ("∞∞"); setD(); break;	
+
+				case 2: setT(color); printf ("±±"); setD(); break; // difuminado	
+							
+				case 1: setT(color); printf ("≤≤"); setD(); break; //gris claro mas difuminado			
+								
+				case 4: setT(color); printf ("€€"); setD(); break; //completo	
+				
+				
+			}
 }
 
 //--------------------------------------------------------------------

@@ -9,6 +9,10 @@
 #define TDICC 80500
 #define TPALABRA 24
 
+#define FILE_LOG "log.dat"
+#define FILE_DICC "dicc.txt"
+
+
 #include "VIDEO.cpp"
 
 int continuar();
@@ -17,39 +21,22 @@ int reintentar_menu(int intentos);
 int es_anagrama(char cad1[], char cad2[]);
 void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int partidas);
 int es_texto(char cad[]);
-void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA], int jugador_empieza);
+void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA], int jugador_empieza, int idJuego);
 void ingresar_nombre(char palabra[]);
 void ingresar_palabra(char palabra[], char diccionario[][TPALABRA]);
 int cargar_diccionario(char diccionario[][TPALABRA]);
 int buscar_palabra(char diccionario[][TPALABRA], char palabra[]);
 void juego();
 void imprimir_terminator(int x, int y);
-void crear_log(char anagrama[], int intentos, int ganador, int jugador_empieza);
+void crear_log(int,char anagrama[], int intentos, int ganador, int jugador_empieza);
 
 
-void paintearD (int unit){
-	
-	// numero: 34 
-	// color 3
-	// intensidad / completo? 4 
-	
-	int color = trunc(unit / 10);
-	int intensidad = unit % 10;
 
-	switch (intensidad){
-				
-				case 0: setD(); printf ("  "); setD(); break;
-				
-				case 3: setT(color); printf ("°°"); setD(); break;	
-
-				case 2: setT(color); printf ("±±"); setD(); break; // difuminado	
-							
-				case 1: setT(color); printf ("²²"); setD(); break; //gris claro mas difuminado			
-								
-				case 4: setT(color); printf ("ÛÛ"); setD(); break; //completo	
-				
-				
-			}
+int main() // --------------------MAIN------------------------
+{
+	SetConsoleTitle("ANAGRAMANEITOR");
+	do{
+	}while(menu() != 99);
 }
 
 void imprimir_terminator(int x, int y){
@@ -97,13 +84,6 @@ void imprimir_terminator(int x, int y){
 		}
 	}
 	
-}
-
-int main() // --------------------MAIN------------------------
-{
-	SetConsoleTitle("ANAGRAMANEITOR");
-	do{
-	}while(menu() != 99);
 }
 
 void imprimir_menu()
@@ -159,7 +139,7 @@ void juego()
 	
 	int partidas=0;
     int puntosj1=0,puntosj2=0;
-    char nombrej1[LMAX]="Marchelox",nombrej2[LMAX] = "X7REME13";
+    char nombrej1[LMAX]="Jugador 1",nombrej2[LMAX] = "Jugador 2";
     
 	char diccionario[TDICC][TPALABRA];
 	
@@ -172,12 +152,13 @@ void juego()
 
     srand(time(NULL));
     int moneda=rand()%2;
+    int idJuego = setearIdJuego();
 
     do{ //partida
         partidas++;
         
-        if(partidas%2==moneda) partida(nombrej1,&puntosj1,nombrej2,&puntosj2,diccionario, moneda);
-        else partida(nombrej2,&puntosj2,nombrej1,&puntosj1,diccionario, moneda);
+        if(partidas%2!=moneda) partida(nombrej1,&puntosj1,nombrej2,&puntosj2,diccionario, moneda, idJuego);
+        else partida(nombrej2,&puntosj2,nombrej1,&puntosj1,diccionario, moneda, idJuego);
         
 		printf("Puntos %s: %i\n\nPuntos %s: %i",nombrej1,puntosj1,nombrej2,puntosj2);
 		
@@ -188,7 +169,7 @@ void juego()
 int cargar_diccionario(char diccionario[][TPALABRA])
 {
     FILE *dicc;
-    dicc = fopen("dicc.txt","rt");
+    dicc = fopen(FILE_DICC,"rt");
     if(!dicc){
     	return 1;
 	}
@@ -223,7 +204,7 @@ void ingresar_nombre(char palabra[])
 
 }
 
-void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA], int jugador_empieza)
+void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA], int jugador_empieza, int idJuego)
 {
     int intentos=0;
     int reintentar=1;
@@ -253,34 +234,80 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     if (ganoj2==1) *puntosj2=*puntosj2+1;
     else{
     	*puntosj1=*puntosj1+1;
-    	intentos = -1;
+    	//intentos = -1;
 	} 
     
-    crear_log(palabraj1,intentos,ganoj2, jugador_empieza);
+    crear_log(idJuego, palabraj1, intentos, ganoj2, jugador_empieza);
     
 }
 
 struct log{
-		char anagrama[TPALABRA];
-		int intentos;
-		int ganador;
-		int jugador_empieza;
+	int idJuego;
+	char anagrama[TPALABRA];
+	int intentos;
+	int ganador;
+	int jugador_empieza;
 };
 
-void crear_log(char anagrama[], int intentos, int ganador, int jugador_empieza)
+void crear_log(int idJuego, char anagrama[], int intentos, int ganador, int jugador_empieza)
 {
 	struct log log_partida;
-
+	log_partida.idJuego = idJuego;
 	strcpy(log_partida.anagrama, anagrama);
-	printf("\n\n ESTOY GUARDANDO EL ARCHIVO\n");
 	log_partida.intentos = intentos;
 	log_partida.ganador = ganador;
+	
+	
 	log_partida.jugador_empieza = jugador_empieza;
+	
+	printf("\n\n%d: %s | %d | %d | %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
 
 	FILE* f = fopen("log.dat","ab");
 	fwrite(&log_partida, sizeof(struct log), 1, f);	
 	fclose(f);
 }
+
+int setearIdJuego(){
+	struct log log_partida;
+	FILE* f = fopen(FILE_LOG,"rb");
+	if(!f) return 1;
+	
+	fseek(f, sizeof(struct log) * -1, 2);
+	fread(&log_partida, sizeof(struct log), 1, f);
+	fclose(f);
+
+	printf("%d: %s, %d, %d, %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
+	return log_partida.idJuego + 1;	
+	
+}
+
+//void mostrarEstadicticas(){
+//	FILE* f = fopen(FILE_LOG,"rb");
+//	struct log l;
+//	int cantidadPartidas = 0;
+//	int cantidadJuegos = 0;
+//	int cantidadIntentosTotal = 0;
+//	fread(&l, sizeof(struct log), 1, f);
+//	while (!feof(f))
+//	{ 
+//		//printf("Vuelta: %d\n", i);
+//		//printf("%d: %s, %d, %d, %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
+//		cantidadPartidas++;
+//		
+//		if(l.idJuego > cantidadJuegos) cantidadJuegos = l.idJuego;
+//		
+//		cantidadIntentos+= l.intentos;
+//		
+//		jugadorGanador+= l.ganador;
+//		
+//		jugdadorEmpieza+= l.jugador_empieza;
+//		
+//		fread(&l, sizeof(struct log), 1, f);
+//	}
+//	
+//	
+//	
+//}
 
 
 int continuar()
