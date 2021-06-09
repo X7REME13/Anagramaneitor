@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <windows.h>
-#include <math.h>  
+#include <math.h>
 
 #define LMAX 100
 #define TDICC 80500
@@ -54,6 +54,8 @@ void mostrarEstadisticas();
 struct juego setearData();
 struct juego cargadorPartida();
 void bienvenida();
+void instrucciones();
+void inst_pag_1();
 
 // --------------------MAIN------------------------
 
@@ -71,10 +73,10 @@ void bienvenida()
 	imprimir_terminator2(10,0);
 	int i;
 	for(i = 0; i <  25; i++){
-		
+
 		imprimir_terminator(10+(i*2), 0);
 		gotoxy(0,0);
-		Sleep(80);		
+		Sleep(80);
 	}
 }
 
@@ -108,21 +110,21 @@ void imprimir_terminator(int x, int y)
 		{0,0,0,72,72,72,72,72,72,73,73,73,72,72,72,72,72,72,0,0,0},
 		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
 		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
-		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}	
+		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
 	};
 	int iniX = x;
 	int iniY = y;
 	gotoxy(x, y);
 	for (y=0;y<30;y++ ){
-		
+
 		for (x=0;x<24;x++){
 			if (x==0 && y>0) gotoxy(iniX,y+iniY);
-			
+
 			paintearD(terminator[y][x]);
-			 
+
 		}
 	}
-	
+
 }
 
 void imprimir_terminator2(int x, int y)
@@ -155,22 +157,22 @@ void imprimir_terminator2(int x, int y)
 		{0,0,0,72,72,72,72,72,72,73,73,73,72,72,72,72,72,72,0,0,0},
 		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
 		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
-		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}	
+		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
 	};
 	int iniX = x;
 	int iniY = y;
 	gotoxy(x, y);
 	for (y=0;y<30;y++ ){
-		
+
 		for (x=0;x<24;x++){
 			Sleep(1);
 			if (x==0 && y>0) gotoxy(iniX,y+iniY);
-			
+
 			paintearD(terminator[y][x]);
-			 
+
 		}
 	}
-	
+
 }
 
 void imprimir_menu()
@@ -184,7 +186,7 @@ void imprimir_menu()
 	cuadroT("     Estadisticas    ",hudX+10,15,MAGENTA);
 	cuadroT("       Creditos      ",hudX+10,19,MAGENTA);
 	cuadroT("        Salir        ",hudX+10,23,MAGENTA);
-	
+
 	cuadroT("       Ingrese una opcion:  < >        ",hudX,26,9);
 }
 
@@ -205,7 +207,8 @@ int menu()
 			juego(data);
 			break;
 		case 2:
-			printf("Instrucciones");
+			instrucciones();
+			Sleep(1000);
 			break;
 		case 3:
 			data = cargadorPartida();
@@ -216,18 +219,65 @@ int menu()
 			break;
 		case 5:
 			printf("Creditos");
-			break;			
+			break;
 		default:
 			return 99;
-		
+
 	}
 	return 0;
 }
 
-
-struct juego setearData()
+void instrucciones()
 {
-	
+   char c;
+   int pag=1;
+   do{
+    switch(pag){
+    case 1: inst_pag_1(); break;
+    case 2: printf("PAG 2");break;
+    case 3: printf("PAG 3");break;
+    case 4: printf("PAG 4");break;
+    }
+
+    c=getche();
+    if(c=='a')
+    {
+        if(pag>1)
+        {
+            pag--;
+        }
+    }
+    else if(c=='d')
+    {
+        if(pag<4)
+        {
+            pag++;
+        }
+    }
+
+   }while(c!='m');
+
+}
+
+void inst_pag_1()
+{
+    int hudX = 10;
+	cuadroTF("       I N S T R U C C I O N E S       ",hudX+0,0,AZUL,VERDEI);
+    cuadroTtop("Anagramaneitor es un juego para dos    ",hudX+0,3,MAGENTA);
+    cuadroTmid("jugadores, el cual consiste en que,    ",hudX+0,5,MAGENTA);
+    cuadroTmid("por turnos, un jugador propone una     ",hudX+0,7,MAGENTA);
+    cuadroTmid("palabra y el otro jugador tiene 3      ",hudX+0,9,MAGENTA);
+    cuadroTmid("intentos para ingresar un anagrama de  ",hudX+0,11,MAGENTA);
+    cuadroTmid("la misma. Para que se considere intento",hudX+0,13,MAGENTA);
+    cuadroTmid("se debe ingresar una palabra existente,",hudX+0,15,MAGENTA);
+    cuadroTmid("es decir si la palabra ingresada es    ",hudX+0,17,MAGENTA);
+    cuadroTmid("arbol, no se puede poner rabol, tiene  ",hudX+0,19,MAGENTA);
+    cuadroTmid("que ser algo como labor, algo existente",hudX,21,MAGENTA);
+    cuadroTbot("(sigue en pag 2)                       ",hudX,23,MAGENTA);
+}
+
+struct juego setearData(){
+
 	struct juego data;
 	data.idJuego = setearIdJuego();
 	data.partidas=0;
@@ -237,33 +287,33 @@ struct juego setearData()
 	strcpy(data.nombreAdivinador,"Jugador 2");
 	srand(time(NULL));
     data.moneda=rand()%2;
-    
+
 //	printf("Jugador 1 ingrese su nombre: ");
 //    ingresar_nombre(data.nombreEscritor);
 //    printf("\n\nJugador 2 ingrese su nombre: ");
 //    ingresar_nombre(data.nombreAdivinador);
 
-	return data;	
+	return data;
 }
 
 
 void juego(struct juego data)
 {
 	char diccionario[TDICC][TPALABRA];
-	
-    if(cargar_diccionario(diccionario)) return; 
-    
+
+    if(cargar_diccionario(diccionario)) return;
+
 	int jugador_empieza = data.moneda;
     do{ //partida
         data.partidas++;
-        
+
         if(data.partidas%2!=data.moneda) partida(data.nombreEscritor,&data.puntosEscritor,data.nombreAdivinador,&data.puntosAdivinador,diccionario, jugador_empieza, data.idJuego);
         else partida(data.nombreAdivinador,&data.puntosAdivinador,data.nombreEscritor,&data.puntosEscritor,diccionario, jugador_empieza, data.idJuego);
-        
+
         if(jugador_empieza) jugador_empieza = 0;
 		else jugador_empieza = 1;
 		printf("Puntos %s: %i\n\nPuntos %s: %i",data.nombreEscritor,data.puntosEscritor,data.nombreAdivinador,data.puntosAdivinador);
-		
+
     }while(continuar()==1);
     game_over(data.nombreEscritor,data.puntosEscritor,data.nombreAdivinador,data.puntosAdivinador,data.partidas);
 }
@@ -314,20 +364,20 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     char palabraj1[LMAX],palabraj2[LMAX];
     printf("%s ingrese una palabra: ",nombrej1);
     ingresar_palabra(palabraj1,diccionario);
-    
+
     do{//intentos
         intentos++;
         printf("%s ingrese una palabra: ",nombrej2);
         ingresar_palabra(palabraj2,diccionario);
         if (strcmp(palabraj1,palabraj2)==0)reintentar=reintentar_menu(intentos);
-        else 
+        else
 		{
             if (es_anagrama(palabraj1,palabraj2)==0)
 			{
                 ganoj2=1;
                 break;
             }
-            else 
+            else
 			{
                 reintentar=reintentar_menu(intentos);
             }
@@ -337,10 +387,10 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     else{
     	*puntosj1=*puntosj1+1;
     	//intentos = -1;
-	} 
-    
+	}
+
     crear_log(idJuego, palabraj1, nombrej1, nombrej2, intentos, ganoj2, jugador_empieza);
-    
+
 }
 
 void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int intentos, int ganador, int jugador_empieza)
@@ -351,13 +401,13 @@ void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int
 	strcpy(log_partida.nombreEscritor, nombrej1);
 	strcpy(log_partida.nombreAdivinador, nombrej2);
 	log_partida.intentos = intentos;
-	log_partida.ganador = ganador;	
+	log_partida.ganador = ganador;
 	log_partida.jugador_empieza = jugador_empieza;
-	
+
 //	printf("\n\n%d: %s | %d | %d | %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
 
 	FILE* f = fopen("log.dat","ab");
-	fwrite(&log_partida, sizeof(struct log), 1, f);	
+	fwrite(&log_partida, sizeof(struct log), 1, f);
 	fclose(f);
 }
 
@@ -380,7 +430,6 @@ int setearIdJuego()
 
 	printf("ID de juego: %d\n\n",cantidadJuegos + 1);
 	return cantidadJuegos + 1;	
-	
 }
 
 void mostrarEstadisticas()
@@ -396,23 +445,23 @@ void mostrarEstadisticas()
 	int juegoActual = -999;
 	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f))
-	{ 
+	{
 		cantidadPartidas++;
-		
+
 		cantidadIntentosTotal+= l.intentos;
-		
+
 		jugadorGanador+= l.ganador;
-		
+
 		if(l.idJuego > cantidadJuegos){
 			cantidadJuegos = l.idJuego;
 			jugadorEmpieza+= l.jugador_empieza;
 		}
-		
+
 		fread(&l, sizeof(struct log), 1, f);
 	}
 	int hudX = 10;
 	cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
-	
+
 	printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
 	
 //	cuadroT("        Juegos totales:        ",hudX+10,3,MAGENTA);
@@ -431,7 +480,6 @@ void mostrarEstadisticas()
 	printf("Porcentaje de veces que inicio el Jugador 2: %f\n",(float) jugadorEmpieza * 100 / cantidadJuegos);
 	printf("Porcentaje de veces que gano el Escritor: %f\n",(float) (cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
 	printf("Porcentaje de veces que gano el Adivinador: %f\n\n",(float)  jugadorGanador * 100 / cantidadPartidas);
-
 	system("pause");
 	
 }
@@ -439,7 +487,6 @@ void mostrarEstadisticas()
 
 struct juego cargadorPartida()
 {
-	
 	int idJuego;
 	printf("Ingrese su ID de juego: ");
 	scanf("%d",&idJuego);
@@ -451,7 +498,7 @@ struct juego cargadorPartida()
 		fread(&l, sizeof(struct log), 1, f);
 	}
 	struct juego data;
-	
+
 	data.idJuego = l.idJuego;
 	data.moneda = l.jugador_empieza;
 	if(!l.jugador_empieza) {
@@ -462,25 +509,25 @@ struct juego cargadorPartida()
 		strcpy(data.nombreAdivinador,l.nombreEscritor);
 		strcpy(data.nombreEscritor, l.nombreAdivinador);
 	}
-	
+
 	data.partidas = 0;
 	data.puntosEscritor = 0;
 	data.puntosAdivinador = 0;
-	
+
 	while (!feof(f))
-	{ 
+	{
 		if( l.idJuego == idJuego){
 			if(!l.ganador)	data.puntosEscritor++;
 			else data.puntosAdivinador++;
 			data.partidas++;
-		}	
+		}
 		fread(&l, sizeof(struct log), 1, f);
 	}
 
 	fclose(f);
 	printf("\n| ID: %2d | J1: \"%s\" Puntos: %d | J2: \"%s\" Puntos: %d |\n\n ",data.idJuego, data.nombreAdivinador, data.puntosAdivinador, data.nombreEscritor, data.puntosEscritor);
 	return data;
-	
+
 }
 
 
