@@ -159,7 +159,6 @@ void cuadroT(const char *text,int x,int y,int ColorBorde){
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,ColorBorde);
 
-
 }
 
 void cuadroIT(const char *textFormat,int x,int y,int ColorBorde, int variable){
@@ -304,7 +303,7 @@ void cuadroTmid(const char *text,int x,int y,int ColorBorde){  //necesito armar 
 	gotoxy(x+1,y+1);
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,ColorBorde);
-	printf ("\n");
+
 
 }
 
@@ -322,7 +321,7 @@ void cuadroTtop(const char *text,int x,int y,int ColorBorde){
 	gotoxy(x+1,y+1);
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,ColorBorde);
-	printf ("\n");
+
 
 }
 
@@ -340,7 +339,7 @@ void cuadroTbot(const char *text,int x,int y,int ColorBorde){
 	gotoxy(x+1,y+1);
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,ColorBorde);
-	printf ("\n");
+
 
 }
 //--------------------------------------------------------------------

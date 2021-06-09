@@ -12,7 +12,11 @@
 #define FILE_LOG "log.dat"
 #define FILE_DICC "dicc.txt"
 
+#define XTER 65
+#define YTER 1
+
 #include "VIDEO.c"
+
 
 struct juego{
 	int idJuego;
@@ -59,8 +63,8 @@ void inst_pag_1();
 
 // --------------------MAIN------------------------
 
-int main() 
-{	
+int main()
+{
 	SetConsoleTitle("ANAGRAMANEITOR");
 	//bienvenida();
 	do{
@@ -70,12 +74,12 @@ int main()
 
 void bienvenida()
 {
-	imprimir_terminator2(10,0);
+	imprimir_terminator2(10,YTER);
 	int i;
-	for(i = 0; i <  25; i++){
+	for(i = 0; i < (XTER-10)/2; i++){
 
-		imprimir_terminator(10+(i*2), 0);
-		gotoxy(0,0);
+		imprimir_terminator(10+(i*2), YTER);
+		//gotoxy(0,0);
 		Sleep(80);
 	}
 }
@@ -115,7 +119,7 @@ void imprimir_terminator(int x, int y)
 	int iniX = x;
 	int iniY = y;
 	gotoxy(x, y);
-	for (y=0;y<30;y++ ){
+	for (y=0;y<28;y++ ){
 
 		for (x=0;x<24;x++){
 			if (x==0 && y>0) gotoxy(iniX,y+iniY);
@@ -162,7 +166,7 @@ void imprimir_terminator2(int x, int y)
 	int iniX = x;
 	int iniY = y;
 	gotoxy(x, y);
-	for (y=0;y<30;y++ ){
+	for (y=0;y<28;y++ ){
 
 		for (x=0;x<24;x++){
 			Sleep(1);
@@ -178,7 +182,7 @@ void imprimir_terminator2(int x, int y)
 void imprimir_menu()
 {
 	int hudX = 10;
-	cuadroTF("                M E N U                ",hudX+0,0,AZUL,VERDEI);
+	cuadroTF("                M E N U                ",hudX+0,0,AZUL_INTENSO,VERDEI);
 	itemsNum(6, hudX + 3, 4, VERDEI);
 	cuadroT("        Jugar        ",hudX+10,3,MAGENTA);
 	cuadroT("    Instrucciones    ",hudX+10,7,MAGENTA);
@@ -187,13 +191,13 @@ void imprimir_menu()
 	cuadroT("       Creditos      ",hudX+10,19,MAGENTA);
 	cuadroT("        Salir        ",hudX+10,23,MAGENTA);
 
-	cuadroT("       Ingrese una opcion:  < >        ",hudX,26,9);
+	cuadroT("       Ingrese una opcion:  < >        ",hudX,26,AZUL_INTENSO);
 }
 
 int menu()
 {
 	system("cls");
-	imprimir_terminator(60, 0);
+	imprimir_terminator(XTER,YTER);
 	imprimir_menu();
 	int opcion = 0;
 	gotoxy(40,27);
@@ -208,7 +212,6 @@ int menu()
 			break;
 		case 2:
 			instrucciones();
-			Sleep(1000);
 			break;
 		case 3:
 			data = cargadorPartida();
@@ -230,16 +233,30 @@ int menu()
 void instrucciones()
 {
    char c;
-   int pag=1;
+   int pag=1,hudX=5;
+   cuadroTF("       I N S T R U C C I O N E S       ",hudX+5,0,AZUL_INTENSO,VERDEI);
+   imprimir_terminator(65,1);
+   cuadroT("  a : avanzar | d : retroceder | m : volver al menu  ",hudX-1,27,AZUL_INTENSO);
    do{
-    switch(pag){
-    case 1: inst_pag_1(); break;
-    case 2: printf("PAG 2");break;
-    case 3: printf("PAG 3");break;
-    case 4: printf("PAG 4");break;
-    }
 
-    c=getche();
+    switch(pag){
+    case 1:
+        inst_pag_1();
+        break;
+    case 2:
+        inst_pag_2();
+        break;
+    case 3:
+        inst_pag_3();
+        break;
+    }
+    gotoxy(27,25);
+    printf("<<%i/3>>",pag);
+
+
+
+    c=getch();
+
     if(c=='a')
     {
         if(pag>1)
@@ -249,7 +266,7 @@ void instrucciones()
     }
     else if(c=='d')
     {
-        if(pag<4)
+        if(pag<3)
         {
             pag++;
         }
@@ -262,7 +279,6 @@ void instrucciones()
 void inst_pag_1()
 {
     int hudX = 10;
-	cuadroTF("       I N S T R U C C I O N E S       ",hudX+0,0,AZUL,VERDEI);
     cuadroTtop("Anagramaneitor es un juego para dos    ",hudX+0,3,MAGENTA);
     cuadroTmid("jugadores, el cual consiste en que,    ",hudX+0,5,MAGENTA);
     cuadroTmid("por turnos, un jugador propone una     ",hudX+0,7,MAGENTA);
@@ -272,8 +288,43 @@ void inst_pag_1()
     cuadroTmid("se debe ingresar una palabra existente,",hudX+0,15,MAGENTA);
     cuadroTmid("es decir si la palabra ingresada es    ",hudX+0,17,MAGENTA);
     cuadroTmid("arbol, no se puede poner rabol, tiene  ",hudX+0,19,MAGENTA);
-    cuadroTmid("que ser algo como labor, algo existente",hudX,21,MAGENTA);
-    cuadroTbot("(sigue en pag 2)                       ",hudX,23,MAGENTA);
+    cuadroTbot("que ser, por ejemplo labor.            ",hudX,21,MAGENTA);
+
+
+}
+
+void inst_pag_2()
+{
+    int hudX = 10;
+	cuadroTtop("Si el jugador logra ingresar un        ",hudX,3,MAGENTA);
+	cuadroTmid("anagrama en menos de 3 intentos, gana  ",hudX,5,MAGENTA);
+	cuadroTmid("un punto. Si consume sus 3 intentos o  ",hudX,7,MAGENTA);
+	cuadroTmid("se rinde antes, el jugador que         ",hudX,9,MAGENTA);
+	cuadroTmid("propuso la palabra gana un punto.      ",hudX,11,MAGENTA);
+	cuadroTmid("Una vez concluida la ronda, los        ",hudX,13,MAGENTA);
+	cuadroTmid("turnos se invierten, asi no hay        ",hudX,15,MAGENTA);
+	cuadroTmid("desventajas para el segundo jugador.   ",hudX,17,MAGENTA);
+	cuadroTmid("Siempre al final de cada ronda se da   ",hudX,19,MAGENTA);
+	cuadroTbot("la opcion de dejar de jugar.           ",hudX,21,MAGENTA);
+
+
+
+}
+
+void inst_pag_3()
+{
+    int hudX = 10;
+	cuadroTtop("RECUPERAR UNA PARTIDA                  ",hudX,3,MAGENTA);
+	cuadroTmid("Al inicio de cada juego, se le asigna  ",hudX,5,MAGENTA);
+	cuadroTmid("un ID de partida. Para retomar la misma",hudX,7,MAGENTA);
+	cuadroTmid("se selecciona 3 en el menu principal,  ",hudX,9,MAGENTA);
+	cuadroTmid("                                       ",hudX,13,NEGRO);
+	cuadroTbot("se ingresa esa ID y listo, a jugar!!   ",hudX,11,MAGENTA);
+	cuadroTmid("                                       ",hudX,15,NEGRO);
+	cuadroTmid("                                       ",hudX,17,NEGRO);
+	cuadroTmid("                                       ",hudX,19,NEGRO);
+	cuadroTbot("                                       ",hudX,21,NEGRO);
+
 }
 
 struct juego setearData(){
@@ -364,7 +415,8 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     int reintentar=1;
     int ganoj2 = 0;
     char palabraj1[LMAX],palabraj2[LMAX];
-    printf("%s ingrese una palabra: ",nombrej1);
+    cuadroST(" %s ingrese una palabra:  ",0,4,MAGENTA,nombrej1);
+    //printf("%s ingrese una palabra: ",nombrej1);
     ingresar_palabra(palabraj1,diccionario);
 
     do{//intentos
@@ -421,17 +473,18 @@ int setearIdJuego()
 	int cantidadJuegos = -1;
 	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f))
-	{ 
+	{
 		if(l.idJuego > cantidadJuegos){
 			cantidadJuegos = l.idJuego;
-		}		
+		}
 		fread(&l, sizeof(struct log), 1, f);
 	}
 	fread(&l, sizeof(struct log), 1, f);
 	fclose(f);
 
-	printf("ID de juego: %d\n\n",cantidadJuegos + 1);
-	return cantidadJuegos + 1;	
+	cuadroIT(" ID: %03i ",0,0,AZUL,cantidadJuegos+1);
+	//printf("ID de juego: %d\n\n",cantidadJuegos + 1);
+	return cantidadJuegos + 1;
 }
 
 void mostrarEstadisticas()
@@ -464,6 +517,7 @@ void mostrarEstadisticas()
 	int hudX = 10;
 	cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
 
+
     cuadroIT("          Juegos totales: %d           ",hudX+0,3,MAGENTA,cantidadJuegos);
     cuadroIT("         Partidas totales: %d          ",hudX+0,6,MAGENTA, cantidadPartidas);
     cuadroFT("        Partidas por juego: %f         ",hudX+0,9,MAGENTA,(float) cantidadPartidas / cantidadJuegos);
@@ -476,7 +530,6 @@ void mostrarEstadisticas()
 	
 	
 	printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
-
 	printf("Juegos totales: %d\n", cantidadJuegos);
 	printf("Partidas totales: %d\n", cantidadPartidas);
 	printf("Partidas por juego: %f\n",(float) cantidadPartidas / cantidadJuegos );
@@ -486,7 +539,7 @@ void mostrarEstadisticas()
 	printf("Porcentaje de veces que gano el Escritor: %f\n",(float) (cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
 	printf("Porcentaje de veces que gano el Adivinador: %f\n\n",(float)  jugadorGanador * 100 / cantidadPartidas);
 	system("pause");
-	
+
 }
 
 
@@ -499,7 +552,7 @@ struct juego cargadorPartida()
 	FILE* f = fopen("log.dat","rb");
 	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f) && l.idJuego != idJuego)
-	{ 
+	{
 		fread(&l, sizeof(struct log), 1, f);
 	}
 	struct juego data;
