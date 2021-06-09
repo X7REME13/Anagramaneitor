@@ -1,18 +1,19 @@
 # depslib dependency file v1.0
-1623273921 source:c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\main.c
+1623280457 source:c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<time.h>
 	<windows.h>
 	<math.h>
+	<conio.h>
 	"VIDEO.c"
 
 1623260481 c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\video.cpp
 	<windows.h>
 	<stdio.h>
 
-1623273774 c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\video.c
+1623279646 c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\video.c
 	<windows.h>
 	<stdio.h>
 

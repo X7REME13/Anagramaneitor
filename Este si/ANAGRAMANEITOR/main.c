@@ -4,6 +4,7 @@
 #include <time.h>
 #include <windows.h>
 #include <math.h>
+#include <conio.h> //para getch()
 
 #define LMAX 100
 #define TDICC 80500
@@ -57,9 +58,15 @@ void crear_log(int,char anagrama[], char nombrej1[], char nombrej2[], int intent
 void mostrarEstadisticas();
 struct juego setearData();
 struct juego cargadorPartida();
+int menu();
 void bienvenida();
 void instrucciones();
 void inst_pag_1();
+void inst_pag_2();
+void inst_pag_3();
+int setearIdJuego();
+
+
 
 // --------------------MAIN------------------------
 
@@ -218,6 +225,7 @@ int menu()
 			juego(data);
 			break;
 		case 4:
+			system("cls");
 			mostrarEstadisticas();
 			break;
 		case 5:
@@ -236,7 +244,7 @@ void instrucciones()
    int pag=1,hudX=5;
    cuadroTF("       I N S T R U C C I O N E S       ",hudX+5,0,AZUL_INTENSO,VERDEI);
    imprimir_terminator(65,1);
-   cuadroT("  a : avanzar | d : retroceder | m : volver al menu  ",hudX-1,27,AZUL_INTENSO);
+   cuadroT("  a : retroceder | d : avanzar | m : volver al menu  ",hudX-1,27,AZUL_INTENSO);
    do{
 
     switch(pag){
@@ -389,7 +397,7 @@ int cargar_diccionario(char diccionario[][TPALABRA])
 				c = 164;
 			}
 			diccionario[palabra][character] = c;
-			character++;		
+			character++;
 		}
     }
     fclose(dicc);
@@ -498,6 +506,7 @@ void mostrarEstadisticas()
 	int jugadorGanador = 0;
 	int jugadorEmpieza = 0;
 	int juegoActual = -999;
+	char c;
 	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f))
 	{
@@ -515,30 +524,37 @@ void mostrarEstadisticas()
 		fread(&l, sizeof(struct log), 1, f);
 	}
 	int hudX = 10;
-	cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
+	imprimir_terminator(65,1);
+	do{
+        cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
 
 
-    cuadroIT("          Juegos totales: %d           ",hudX+0,3,MAGENTA,cantidadJuegos);
-    cuadroIT("         Partidas totales: %d          ",hudX+0,6,MAGENTA, cantidadPartidas);
-    cuadroFT("        Partidas por juego: %f         ",hudX+0,9,MAGENTA,(float) cantidadPartidas / cantidadJuegos);
-    cuadroTmid("la misma. Para que se considere intento",hudX+0,13,MAGENTA);
-    cuadroTmid("se debe ingresar una palabra existente,",hudX+0,15,MAGENTA);
-    cuadroTmid("es decir si la palabra ingresada es    ",hudX+0,17,MAGENTA);
-    cuadroTmid("arbol, no se puede poner rabol, tiene  ",hudX+0,19,MAGENTA);
-    cuadroTmid("que ser algo como labor, algo existente",hudX,21,MAGENTA);
-    cuadroTbot("(sigue en pag 2)                       ",hudX,23,MAGENTA);
-	
-	
-	printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
-	printf("Juegos totales: %d\n", cantidadJuegos);
-	printf("Partidas totales: %d\n", cantidadPartidas);
-	printf("Partidas por juego: %f\n",(float) cantidadPartidas / cantidadJuegos );
-	printf("Promedio intento por partida: %f\n",(float) cantidadIntentosTotal / cantidadPartidas);
-	printf("Porcentaje de veces que inicio el Jugador 1: %f\n",(float) (cantidadJuegos - jugadorEmpieza) * 100 / cantidadJuegos);
-	printf("Porcentaje de veces que inicio el Jugador 2: %f\n",(float) jugadorEmpieza * 100 / cantidadJuegos);
-	printf("Porcentaje de veces que gano el Escritor: %f\n",(float) (cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
-	printf("Porcentaje de veces que gano el Adivinador: %f\n\n",(float)  jugadorGanador * 100 / cantidadPartidas);
-	system("pause");
+        cuadroITtop("          Juegos totales: %03d          ",hudX+0,3,MAGENTA,cantidadJuegos);
+        cuadroITmid("         Partidas totales: %03d         ",hudX+0,5,MAGENTA, cantidadPartidas);
+        cuadroFTmid("        Partidas por juego: %.2f       ",hudX+0,7,MAGENTA,(float) cantidadPartidas / cantidadJuegos);
+        cuadroFTmid("       Intentos por partida: %.2f      ",hudX+0,9,MAGENTA,(float)cantidadIntentosTotal / cantidadPartidas);
+        cuadroFTmid("      Inicios de Jugador 1: %.2f %%    ",hudX+0,11,MAGENTA,(float)(cantidadJuegos - jugadorEmpieza)*100/cantidadJuegos);
+        cuadroFTmid("      Inicios de Jugador 2: %.2f %%    ",hudX+0,13,MAGENTA,(float)jugadorEmpieza * 100 / cantidadJuegos);
+        cuadroFTmid("         Gana Escritor: %.2f %%        ",hudX+0,15,MAGENTA,(float)(cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
+        cuadroFTbot("        Gana Adivinador: %.2f %%       ",hudX+0,17,MAGENTA,(float)jugadorGanador * 100 / cantidadPartidas);
+        printf("\n");
+        cuadroT(" m : volver al menu  ",hudX+10,25,AZUL_INTENSO);
+        c=getch();
+
+	}while(c!='m');
+
+
+
+
+	//printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
+	//printf("Juegos totales: %d\n", cantidadJuegos);
+	//printf("Partidas totales: %d\n", cantidadPartidas);
+	//printf("Partidas por juego: %f\n",(float) cantidadPartidas / cantidadJuegos );
+	//printf("Promedio intento por partida: %f\n",(float) cantidadIntentosTotal / cantidadPartidas);
+	//printf("Porcentaje de veces que inicio el Jugador 1: %f\n",(float) (cantidadJuegos - jugadorEmpieza) * 100 / cantidadJuegos);
+	//printf("Porcentaje de veces que inicio el Jugador 2: %f\n",(float) jugadorEmpieza * 100 / cantidadJuegos);
+	//printf("Porcentaje de veces que gano el Escritor: %f\n",(float) (cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
+	//printf("Porcentaje de veces que gano el Adivinador: %f\n\n",(float)  jugadorGanador * 100 / cantidadPartidas);
 
 }
 
