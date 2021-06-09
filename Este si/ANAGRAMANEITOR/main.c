@@ -12,7 +12,7 @@
 #define FILE_LOG "log.dat"
 #define FILE_DICC "dicc.txt"
 
-#include "VIDEO.cpp"
+#include "VIDEO.c"
 
 struct juego{
 	int idJuego;
@@ -55,10 +55,10 @@ struct juego setearData();
 struct juego cargadorPartida();
 void bienvenida();
 
+// --------------------MAIN------------------------
 
-int main() // --------------------MAIN------------------------
+int main() 
 {	
-
 	SetConsoleTitle("ANAGRAMANEITOR");
 	//bienvenida();
 	do{
@@ -66,7 +66,8 @@ int main() // --------------------MAIN------------------------
 }
 
 
-void bienvenida(){
+void bienvenida()
+{
 	imprimir_terminator2(10,0);
 	int i;
 	for(i = 0; i <  25; i++){
@@ -77,7 +78,8 @@ void bienvenida(){
 	}
 }
 
-void imprimir_terminator(int x, int y){
+void imprimir_terminator(int x, int y)
+{
 	int terminator[30][24]=
 	{
 		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
@@ -123,7 +125,8 @@ void imprimir_terminator(int x, int y){
 	
 }
 
-void imprimir_terminator2(int x, int y){
+void imprimir_terminator2(int x, int y)
+{
 	int terminator[30][24]=
 	{
 		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
@@ -210,7 +213,6 @@ int menu()
 			break;
 		case 4:
 			mostrarEstadisticas();
-			system("pause");
 			break;
 		case 5:
 			printf("Creditos");
@@ -223,7 +225,8 @@ int menu()
 }
 
 
-struct juego setearData(){
+struct juego setearData()
+{
 	
 	struct juego data;
 	data.idJuego = setearIdJuego();
@@ -358,21 +361,31 @@ void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int
 	fclose(f);
 }
 
-int setearIdJuego(){
-	struct log log_partida;
+int setearIdJuego()
+{
+	struct log l;
 	FILE* f = fopen(FILE_LOG,"rb");
 	if(!f) return 1;
-	
-	fseek(f, sizeof(struct log) * -1, 2);
-	fread(&log_partida, sizeof(struct log), 1, f);
+	int cantidadJuegos = -1;
+	fread(&l, sizeof(struct log), 1, f);
+	while (!feof(f))
+	{ 
+		if(l.idJuego > cantidadJuegos){
+			cantidadJuegos = l.idJuego;
+		}		
+		fread(&l, sizeof(struct log), 1, f);
+	}
+	fread(&l, sizeof(struct log), 1, f);
 	fclose(f);
 
-//	printf("%d: %s, %d, %d, %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
-	return log_partida.idJuego + 1;	
+	printf("ID de juego: %d\n\n",cantidadJuegos + 1);
+	return cantidadJuegos + 1;	
 	
 }
 
-void mostrarEstadisticas(){
+void mostrarEstadisticas()
+{
+	system("cls");
 	FILE* f = fopen(FILE_LOG,"rb");
 	struct log l;
 	int cantidadPartidas = 0;
@@ -402,6 +415,12 @@ void mostrarEstadisticas(){
 	
 	printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
 	
+//	cuadroT("        Juegos totales:        ",hudX+10,3,MAGENTA);
+//	cuadroT("    Instrucciones    ",hudX+10,7,MAGENTA);
+//	cuadroT("   Retomar partida   ",hudX+10,11 ,MAGENTA);
+//	cuadroT("     Estadisticas    ",hudX+10,15,MAGENTA);
+//	cuadroT("       Creditos      ",hudX+10,19,MAGENTA);
+//	cuadroT("        Salir        ",hudX+10,23,MAGENTA);
 	
 	printf("Estadisticas:\n");
 	printf("Juegos totales: %d\n", cantidadJuegos);
@@ -411,14 +430,15 @@ void mostrarEstadisticas(){
 	printf("Porcentaje de veces que inicio el Jugador 1: %f\n",(float) (cantidadJuegos - jugadorEmpieza) * 100 / cantidadJuegos);
 	printf("Porcentaje de veces que inicio el Jugador 2: %f\n",(float) jugadorEmpieza * 100 / cantidadJuegos);
 	printf("Porcentaje de veces que gano el Escritor: %f\n",(float) (cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
-	printf("Porcentaje de veces que gano el Adivinador: %f\n",(float)  jugadorGanador * 100 / cantidadPartidas);
+	printf("Porcentaje de veces que gano el Adivinador: %f\n\n",(float)  jugadorGanador * 100 / cantidadPartidas);
 
-	
+	system("pause");
 	
 }
 
 
-struct juego cargadorPartida(){
+struct juego cargadorPartida()
+{
 	
 	int idJuego;
 	printf("Ingrese su ID de juego: ");
@@ -428,7 +448,6 @@ struct juego cargadorPartida(){
 	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f) && l.idJuego != idJuego)
 	{ 
-		printf("LA PUTA MADRE");
 		fread(&l, sizeof(struct log), 1, f);
 	}
 	struct juego data;
@@ -448,7 +467,6 @@ struct juego cargadorPartida(){
 	data.puntosEscritor = 0;
 	data.puntosAdivinador = 0;
 	
-//	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f))
 	{ 
 		if( l.idJuego == idJuego){
@@ -460,7 +478,7 @@ struct juego cargadorPartida(){
 	}
 
 	fclose(f);
-	
+	printf("\n| ID: %2d | J1: \"%s\" Puntos: %d | J2: \"%s\" Puntos: %d |\n\n ",data.idJuego, data.nombreAdivinador, data.puntosAdivinador, data.nombreEscritor, data.puntosEscritor);
 	return data;
 	
 }
@@ -512,7 +530,7 @@ int buscar_palabra(char dicci[][TPALABRA], char palabra[])
 {
     int i = 0;
     while(strcmp(palabra,dicci[i])!=0 && i < TDICC) i++;
-    printf("%i",i);
+    printf("\nNumero de palabra: %i\n",i);
     if(i != TDICC) return 0;
     else return 1;
 }

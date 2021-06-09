@@ -22,7 +22,6 @@ struct log{
 	int jugador_empieza;
 } log_partida;
 
-
 int setearIdJuego(){
 	struct log log_partida;
 	FILE* f = fopen("log.dat","rb");
@@ -95,6 +94,7 @@ void hacerGrafico(int ram, float valor){
 	printf ("] = %f%%\n",valor);
 }
 
+//-----------MAIN----------------------
 
 int main(){
 	
