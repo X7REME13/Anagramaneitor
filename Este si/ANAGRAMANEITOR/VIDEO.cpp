@@ -38,13 +38,13 @@ void gotoxy(int x, int y){
         SetConsoleCursorPosition(hCon,dwPos);
 }
 
-void setD() { 
+void setD() {
     HANDLE hCon;
     hCon=GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute (hCon,GRIS_CLARO);
 }
 
-void setT(int texto) { 
+void setT(int texto) {
     HANDLE hCon;
     hCon=GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute (hCon,texto);
@@ -63,7 +63,7 @@ void settitle (const char *texto){
 }
 
 void paintF(int x, int y, int *figura,int limY,int limX,int color){
-	
+
 	int j=0;
 	gotoxy(x,y);
 	int a,b;
@@ -74,21 +74,21 @@ void paintF(int x, int y, int *figura,int limY,int limX,int color){
 			switch (figura[j]){
 
 				case 0: printf (" ");  break;				//Vv Tuberias vV
-				
+
 				case 1: setT (color); printf ("ษ"); setD(); break; //sup-izq
-				
+
 				case 2: setT (color); printf ("อ"); setD(); break;//vert
-				
+
 				case 3: setT (color); printf ("ป"); setD(); break;//sup-der
-							
+
 				case 4: setT (color); printf ("บ"); setD(); break;//horiz
-				
+
 				case 5: setT (color); printf ("ศ"); setD(); break;//inf-izq
-				
+
 				case 6: setT (color); printf ("ผ"); setD(); break;//inf-der
-				
+
 				case 7: setT (color); printf ("อออออออออออออออ"); setD(); break;//vert x15
-				
+
 				case 8:  printf ("               "); break;//void x15
 			}
 			j++;
@@ -97,41 +97,41 @@ void paintF(int x, int y, int *figura,int limY,int limX,int color){
 }
 
 void paintU(int thing,int color){
-	
+
 
 			switch (thing){
 
 				case 0: printf (" ");  break;								 //Vv Tuberias vV
-				
+
 				case 1: setT (color); printf ("ษ"); setD(); break; //sup-izq
-				
+
 				case 2: setT (color); printf ("อ"); setD(); break;//vert
-				
+
 				case 3: setT (color); printf ("ป"); setD(); break;//sup-der
-							
+
 				case 4: setT (color); printf ("บ"); setD(); break;//horiz
-				
+
 				case 5: setT (color); printf ("ศ"); setD(); break;//inf-izq
-				
+
 				case 6: setT (color); printf ("ผ"); setD(); break;//inf-der
-				
+
 				case 7: setT (color); printf ("อออออออออออออออ"); setD(); break;//vert x15
-				
+
 				case 8:  printf ("               "); break;//void x15
 			}
-			
-		
-	
+
+
+
 }
 
 void cuadro(const char *text,int x,int y){
 	int top[3]={1,4,5};
 	int midS[3]={2,0,2,};
-	//int midL[3]={7,8,7,};	
+	//int midL[3]={7,8,7,};
 	int bot[3]={3,4,6,};
-	
+
 	int len=strlen(text) + 1;
-	
+
 	paintF (x,y,top,3,1,9);
 	int j;
 	for ( j=1;j<len;j++)	paintF (x+j,y,midS,3,1,9);
@@ -139,17 +139,17 @@ void cuadro(const char *text,int x,int y){
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,9);
 	printf ("\n");
-	
+
 }
 
 void cuadroT(const char *text,int x,int y,int ColorBorde){
 	int top[3]={1,4,5};
 	int midS[3]={2,0,2,};
-	//int midL[3]={7,8,7,};	
+	//int midL[3]={7,8,7,};
 	int bot[3]={3,4,6,};
-	
+
 	int len=strlen(text) + 1;
-	
+
 	paintF (x,y,top,3,1,ColorBorde);
 	int j;
 	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
@@ -157,17 +157,17 @@ void cuadroT(const char *text,int x,int y,int ColorBorde){
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,ColorBorde);
 	printf ("\n");
-	
+
 }
 
 void cuadroTF(const char *text,int x,int y,int ColorBorde,int ColorTexto){
 	int top[3]={1,4,5};
 	int midS[3]={2,0,2,};
-	//int midL[3]={7,8,7,};	
+	//int midL[3]={7,8,7,};
 	int bot[3]={3,4,6,};
-	
+
 	int len=strlen(text) + 1;
-	
+
 	paintF (x,y,top,3,1,ColorBorde);
 	int j;
 	for (j=1;j<len;j++)	paintF (x+j,y,midS,3,1,ColorBorde);
@@ -177,45 +177,98 @@ void cuadroTF(const char *text,int x,int y,int ColorBorde,int ColorTexto){
 	setD();
 	paintF (x+len,y,bot,3,1,ColorBorde);
 	printf ("\n");
-	
+
 }
 
 void itemsNum(int cantItems, int x, int y,int color){
-	
+
 	setT(color);
 	int a;
 	int inter=0;
 	for (a=0;a<cantItems;a++){
 		gotoxy(x,y+inter);
-		printf ("ฎ%dฏ",a+1);	
-		inter+=4;		
+		printf ("ฎ%dฏ",a+1);
+		inter+=4;
 	}
-	setD();	
+	setD();
 }
 
 void paintearD (int unit){
-	
-	// numero: 34 
+
+	// numero: 34
 	// color 3
-	// intensidad / completo? 4 
-	
+	// intensidad / completo? 4
+
 	int color = trunc(unit / 10);
 	int intensidad = unit % 10;
 
 	switch (intensidad){
-				
-				case 0: setD(); printf ("  "); setD(); break;
-				
-				case 3: setT(color); printf ("ฐฐ"); setD(); break;	
 
-				case 2: setT(color); printf ("ฑฑ"); setD(); break; // difuminado	
-							
-				case 1: setT(color); printf ("ฒฒ"); setD(); break; //gris claro mas difuminado			
-								
-				case 4: setT(color); printf ("ÛÛ"); setD(); break; //completo	
-				
-				
+				case 0: setD(); printf ("  "); setD(); break;
+
+				case 3: setT(color); printf ("ฐฐ"); setD(); break;
+
+				case 2: setT(color); printf ("ฑฑ"); setD(); break; // difuminado
+
+				case 1: setT(color); printf ("ฒฒ"); setD(); break; //gris claro mas difuminado
+
+				case 4: setT(color); printf ("ÛÛ"); setD(); break; //completo
+
+
 			}
 }
 
+void cuadroTmid(const char *text,int x,int y,int ColorBorde){  //necesito armar un cuadro grande, uso una variacion de cuadro t para imprimir texto metido en el medio de un cuadro
+	int top[3]={4,4,4};
+	int midS[3]={0,0,0,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={4,4,4,};
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+	printf ("\n");
+
+}
+
+void cuadroTtop(const char *text,int x,int y,int ColorBorde){
+	int top[3]={1,4,4};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,4,};
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+	printf ("\n");
+
+}
+
+void cuadroTbot(const char *text,int x,int y,int ColorBorde){
+	int top[3]={4,4,5};
+	int midS[3]={0,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={4,4,6,};
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+	printf ("\n");
+
+}
 //--------------------------------------------------------------------
