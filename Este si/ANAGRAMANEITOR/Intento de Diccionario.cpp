@@ -52,7 +52,7 @@
 
 
 int main(){
-	
+
 	FILE *dicc;
 	dicc = fopen("dicc.txt","rt");
 
@@ -63,7 +63,7 @@ int main(){
 	int character = 0;
 	
 	char consulta[100];	
-	
+	printf("%c",-62);
 	
 	while((c = fgetc(dicc)) != EOF){	
 		if(c == '\n'){
@@ -72,19 +72,20 @@ int main(){
 			character = 0;
 		}
 		
-		if(c == '164') printf("HAY ENIE");
-		
 		else{
+			if(c == '!'){
+				c = 164;
+			}
 			diccionario[palabra][character] = c;
 			character++;		
 		}		
 	}
 	printf("---------------------------------");
-	int num;
-	scanf("%d",&num);
-	printf("%s\n", diccionario[num]);
-	printf("\n1: %d | 2: %d | 3: %d | 4: %d", diccionario[num][0], diccionario[num][1], diccionario[num][2], diccionario[num][3]);
-	
+//	int num;
+//	scanf("%d",&num);
+//	printf("%s\n", diccionario[num]);
+//	printf("\n1: %d | 2: %d | 3: %d | 4: %d", diccionario[num][0], diccionario[num][1], diccionario[num][2], diccionario[num][3]);
+//	
 	while(1){
 		printf("\n<< Ingrese una palabra a buscar: ");
 		gets(consulta);
@@ -96,7 +97,16 @@ int main(){
 		}else{
 			printf(">> No lo encontre");
 		}
-		printf("\n---------------------------------");		
+		printf("\n---------------------------------");	
+		int num;
+		scanf("%d",&num);
+		printf("%s\n", diccionario[num]);
+//		printf("\n1: %d | 2: %d | 3: %d | 4: %d", diccionario[num][0], diccionario[num][1], diccionario[num][2], diccionario[num][3]);
+		i = 0;
+		while(diccionario[num][i]!='\0'){
+			printf("\n%d: %d", i ,diccionario[num][i]);
+			i++;
+		}
 	}
 	fclose(dicc);
 	

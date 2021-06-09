@@ -62,6 +62,8 @@ void settitle (const char *texto){
     SetConsoleTitle(texto);
 }
 
+
+
 void paintF(int x, int y, int *figura,int limY,int limX,int color){
 
 	int j=0;
@@ -138,7 +140,7 @@ void cuadro(const char *text,int x,int y){
 	gotoxy(x+1,y+1);
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,9);
-	printf ("\n");
+
 
 }
 
@@ -156,7 +158,77 @@ void cuadroT(const char *text,int x,int y,int ColorBorde){
 	gotoxy(x+1,y+1);
 	printf ("%s",text);
 	paintF (x+len,y,bot,3,1,ColorBorde);
-	printf ("\n");
+
+
+}
+
+void cuadroIT(const char *textFormat,int x,int y,int ColorBorde, int variable){
+	int top[3]={1,4,5};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,6,};
+	
+	char text[50];
+	
+	sprintf(text,textFormat,variable);
+	
+	
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+
+void cuadroFT(const char *textFormat,int x,int y,int ColorBorde, float variable){
+	int top[3]={1,4,5};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,6,};
+	
+	char text[50];
+	
+	sprintf(text,textFormat,variable);
+	
+	
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+void cuadroST(const char *textFormat,int x,int y,int ColorBorde, char * variable){
+	int top[3]={1,4,5};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,6,};
+	
+	char text[50];
+	
+	sprintf(text,textFormat,variable);
+	
+	
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
 
 }
 
@@ -176,7 +248,7 @@ void cuadroTF(const char *text,int x,int y,int ColorBorde,int ColorTexto){
 	printf ("%s",text);
 	setD();
 	paintF (x+len,y,bot,3,1,ColorBorde);
-	printf ("\n");
+
 
 }
 

@@ -296,7 +296,6 @@ struct juego setearData(){
 	return data;
 }
 
-
 void juego(struct juego data)
 {
 	char diccionario[TDICC][TPALABRA];
@@ -335,9 +334,12 @@ int cargar_diccionario(char diccionario[][TPALABRA])
             character = 0;
         }
         else{
-            diccionario[palabra][character] = c;
-            character++;
-        }
+			if(c == '!'){
+				c = 164;
+			}
+			diccionario[palabra][character] = c;
+			character++;		
+		}
     }
     fclose(dicc);
     return 0;
@@ -462,16 +464,19 @@ void mostrarEstadisticas()
 	int hudX = 10;
 	cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
 
+    cuadroIT("          Juegos totales: %d           ",hudX+0,3,MAGENTA,cantidadJuegos);
+    cuadroIT("         Partidas totales: %d          ",hudX+0,6,MAGENTA, cantidadPartidas);
+    cuadroFT("        Partidas por juego: %f         ",hudX+0,9,MAGENTA,(float) cantidadPartidas / cantidadJuegos);
+    cuadroTmid("la misma. Para que se considere intento",hudX+0,13,MAGENTA);
+    cuadroTmid("se debe ingresar una palabra existente,",hudX+0,15,MAGENTA);
+    cuadroTmid("es decir si la palabra ingresada es    ",hudX+0,17,MAGENTA);
+    cuadroTmid("arbol, no se puede poner rabol, tiene  ",hudX+0,19,MAGENTA);
+    cuadroTmid("que ser algo como labor, algo existente",hudX,21,MAGENTA);
+    cuadroTbot("(sigue en pag 2)                       ",hudX,23,MAGENTA);
+	
+	
 	printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
-	
-//	cuadroT("        Juegos totales:        ",hudX+10,3,MAGENTA);
-//	cuadroT("    Instrucciones    ",hudX+10,7,MAGENTA);
-//	cuadroT("   Retomar partida   ",hudX+10,11 ,MAGENTA);
-//	cuadroT("     Estadisticas    ",hudX+10,15,MAGENTA);
-//	cuadroT("       Creditos      ",hudX+10,19,MAGENTA);
-//	cuadroT("        Salir        ",hudX+10,23,MAGENTA);
-	
-	printf("Estadisticas:\n");
+
 	printf("Juegos totales: %d\n", cantidadJuegos);
 	printf("Partidas totales: %d\n", cantidadPartidas);
 	printf("Partidas por juego: %f\n",(float) cantidadPartidas / cantidadJuegos );
