@@ -214,7 +214,7 @@ void cuadroST(const char *textFormat,int x,int y,int ColorBorde, char * variable
 	//int midL[3]={7,8,7,};
 	int bot[3]={3,4,6,};
 
-	char text[50];
+	char text[70];
 
 	sprintf(text,textFormat,variable);
 

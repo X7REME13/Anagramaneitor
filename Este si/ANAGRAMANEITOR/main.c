@@ -423,13 +423,16 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     int reintentar=1;
     int ganoj2 = 0;
     char palabraj1[LMAX],palabraj2[LMAX];
-    cuadroST(" %s ingrese una palabra:  ",0,4,MAGENTA,nombrej1);
+    cuadroST(" %s ingrese una palabra:                          ",0,4,MAGENTA,nombrej1);
     //printf("%s ingrese una palabra: ",nombrej1);
+    gotoxy(33,5);
     ingresar_palabra(palabraj1,diccionario);
 
     do{//intentos
         intentos++;
-        printf("%s ingrese una palabra: ",nombrej2);
+        cuadroST(" %s ingrese una palabra:                          ",0,4,MAGENTA,nombrej2);
+        //printf("%s ingrese una palabra: ",nombrej2);
+        gotoxy(33,5);
         ingresar_palabra(palabraj2,diccionario);
         if (strcmp(palabraj1,palabraj2)==0)reintentar=reintentar_menu(intentos);
         else
