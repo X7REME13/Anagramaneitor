@@ -13,9 +13,11 @@
 #define FILE_LOG "log.dat"
 #define FILE_DICC "dicc.txt"
 
-#define XTER 65
+#define XTER 70
 #define YTER 1
 
+#define COLOR_ESCRI CIAN
+#define COLOR_ADIV MAGENTA
 
 #include "VIDEO.c"
 
@@ -40,8 +42,8 @@ struct log{
 	int jugador_empieza;
 };
 
-void imprimir_terminator(int x, int y);
-void imprimir_terminator2(int x, int y);
+void imprimir_terminator_lento(int x, int y, int numTer);
+void imprimir_terminator(int x, int y, int numTer);
 int continuar();
 int reintentarMenu(int intentos);
 int reintentar_menu(int intentos);
@@ -50,11 +52,11 @@ void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int par
 int es_texto(char cad[]);
 void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA], int jugador_empieza, int idJuego);
 void ingresar_nombre(char palabra[]);
-void ingresar_palabra(char palabra[], char diccionario[][TPALABRA]);
+void ingresar_palabra(char palabra[], char diccionario[][TPALABRA], int color, int x, int y);
 int cargar_diccionario(char diccionario[][TPALABRA]);
 int buscar_palabra(char diccionario[][TPALABRA], char palabra[]);
 void juego(struct juego);
-void imprimir_terminator(int x, int y);
+
 void crear_log(int,char anagrama[], char nombrej1[], char nombrej2[], int intentos, int ganador, int jugador_empieza);
 void mostrarEstadisticas();
 struct juego setearData();
@@ -73,7 +75,7 @@ int setearIdJuego();
 
 int main()
 {
-	SetConsoleTitle("ANAGRAMANEITOR");
+	SetConsoleTitle("<<< ANAGRAMANEITOR >>>");
 	//bienvenida();
 	do{
 	}while(menu() != 99);
@@ -82,19 +84,19 @@ int main()
 
 void bienvenida()
 {
-	imprimir_terminator2(10,YTER);
+	imprimir_terminator_lento(10,YTER, 1);
 	int i;
 	for(i = 0; i < (XTER-10)/2; i++){
 
-		imprimir_terminator(10+(i*2), YTER);
+		imprimir_terminator(10+(i*2), YTER,1);
 		//gotoxy(0,0);
 		Sleep(80);
 	}
 }
 
-void imprimir_terminator(int x, int y)
+void imprimir_terminator(int x, int y, int numTer)
 {
-	int terminator[30][24]=
+	int terminator[4][30][24]={
 	{
 		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
 		{0,0,0,0,0,72,72,72,72,72,72,72,72,72,72,72,0,0,0,0,0},
@@ -123,25 +125,7 @@ void imprimir_terminator(int x, int y)
 		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
 		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
 		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
-	};
-	int iniX = x;
-	int iniY = y;
-	gotoxy(x, y);
-	for (y=0;y<28;y++ ){
-
-		for (x=0;x<24;x++){
-			if (x==0 && y>0) gotoxy(iniX,y+iniY);
-
-			paintearD(terminator[y][x]);
-
-		}
-	}
-
-}
-
-void imprimir_terminator2(int x, int y)
-{
-	int terminator[30][24]=
+	},
 	{
 		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
 		{0,0,0,0,0,72,72,72,72,72,72,72,72,72,72,72,0,0,0,0,0},
@@ -170,17 +154,121 @@ void imprimir_terminator2(int x, int y)
 		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
 		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
 		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
-	};
+	},
+	{
+        {0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
+        {0,0,0,0,0,72,72,72,72,72,72,72,72,72,72,72,0,0,0,0,0},
+        {0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+        {0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+        {0,0,0,0,71,72,72,72,73,72,72,72,73,72,72,72,73,0,0,0,0},
+        {0,0,0,0,0,72,72,72,73,72,72,72,73,72,72,72,0,0,0,0,0},
+        {0,0,0,0,73,72,72,72,72,73,72,73,72,72,72,72,73,0,0,0,0},
+        {0,0,0,0,73,72,71,72,72,73,73,73,72,72,73,72,73,0,0,0,0},
+        {0,0,0,0,73,72,44,72,44,72,73,72,44,72,44,72,73,0,0,0,0},
+        {0,0,0,0,71,72,0,44,0,0,72,0,0,44,0,72,73,0,0,0,0},
+        {0,0,0,0,71,72,44,0,44,72,72,72,44,0,44,72,73,0,0,0,0},
+        {0,0,0,0,71,72,72,72,72,0,72,0,72,72,72,72,73,0,0,0,0},
+        {0,0,0,0,0,72,72,72,72,0,72,0,72,72,72,72,0,0,0,0,0},
+        {0,0,0,0,71,0,72,0,72,72,72,72,72,0,72,0,73,0,0,0,0},
+        {0,0,0,0,71,72,0,0,71,72,71,72,71,0,0,72,73,0,0,0,0},
+        {0,0,0,0,71,72,72,0,154,83,154,83,154,0,72,72,73,0,0,0,0},
+        {0,0,0,0,0,72,72,0,83,154,83,154,83,0,72,72,0,0,0,0,0},
+        {0,0,0,0,71,72,72,72,72,72,72,72,72,72,72,72,73,0,0,0,0},
+        {0,0,0,0,0,72,72,72,0,72,0,72,0,72,72,72,0,0,0,0,0},
+        {0,0,0,0,72,0,0,72,72,72,0,72,72,72,0,0,72,0,0,0,0},
+        {0,0,0,0,72,0,0,0,72,72,72,72,72,0,0,0,72,0,0,0,0},
+        {0,0,0,0,72,0,0,72,0,0,0,0,0,72,0,0,72,0,0,0,0},
+        {0,0,0,71,72,73,73,73,73,0,0,0,73,73,73,73,72,72,0,0,0},
+        {0,0,0,72,72,72,72,72,72,73,73,73,72,72,72,72,72,72,0,0,0},
+        {0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
+        {0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
+        {0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
+    }};
 	int iniX = x;
 	int iniY = y;
 	gotoxy(x, y);
 	for (y=0;y<28;y++ ){
 
 		for (x=0;x<24;x++){
-			Sleep(1);
 			if (x==0 && y>0) gotoxy(iniX,y+iniY);
+			Sleep(0);
+			paintearD(terminator[numTer][y][x]);
 
-			paintearD(terminator[y][x]);
+		}
+	}
+
+}
+
+void imprimir_terminator_lento(int x, int y, int numTer)
+{
+	int terminator[4][30][24]={
+	{
+		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
+		{0,0,0,0,0,72,72,72,72,72,72,72,72,72,72,72,0,0,0,0,0},
+		{0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,72,73,72,72,72,73,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,73,72,72,72,73,72,72,72,0,0,0,0,0},
+		{0,0,0,0,73,72,72,72,72,73,72,73,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,73,72,71,72,72,73,73,73,72,72,73,72,73,0,0,0,0},
+		{0,0,0,0,73,72,71,72,72,72,73,72,72,72,73,72,73,0,0,0,0},
+		{0,0,0,0,71,72,0,44,0,0,72,0,0,44,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,0,0,72,72,72,72,72,0,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,72,72,0,72,0,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,72,0,72,0,72,72,72,72,0,0,0,0,0},
+		{0,0,0,0,71,0,72,0,72,72,72,72,72,0,72,0,73,0,0,0,0},
+		{0,0,0,0,71,72,0,0,71,72,71,72,71,0,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,0,154,83,154,83,154,0,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,0,83,154,83,154,83,0,72,72,0,0,0,0,0},
+		{0,0,0,0,71,72,72,72,72,72,72,72,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,0,72,0,72,0,72,72,72,0,0,0,0,0},
+		{0,0,0,0,72,0,0,72,72,72,0,72,72,72,0,0,72,0,0,0,0},
+		{0,0,0,0,72,0,0,0,72,72,72,72,72,0,0,0,72,0,0,0,0},
+		{0,0,0,0,72,0,0,72,0,0,0,0,0,72,0,0,72,0,0,0,0},
+		{0,0,0,71,72,73,73,73,73,0,0,0,73,73,73,73,72,72,0,0,0},
+		{0,0,0,72,72,72,72,72,72,73,73,73,72,72,72,72,72,72,0,0,0},
+		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
+		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
+		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
+	},
+	{
+		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
+		{0,0,0,0,0,72,72,72,72,72,72,72,72,72,72,72,0,0,0,0,0},
+		{0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,0,72,72,72,72,72,0,72,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,72,73,72,72,72,73,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,73,72,72,72,73,72,72,72,0,0,0,0,0},
+		{0,0,0,0,73,72,72,72,72,73,72,73,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,73,72,71,72,72,73,73,73,72,72,73,72,73,0,0,0,0},
+		{0,0,0,0,73,72,71,72,72,72,73,72,72,72,73,72,73,0,0,0,0},
+		{0,0,0,0,71,72,0,44,0,0,72,0,0,44,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,0,0,72,72,72,72,72,0,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,72,72,0,72,0,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,72,0,72,0,72,72,72,72,0,0,0,0,0},
+		{0,0,0,0,71,0,72,0,72,72,72,72,72,0,72,0,73,0,0,0,0},
+		{0,0,0,0,71,72,0,0,71,72,71,72,71,0,0,72,73,0,0,0,0},
+		{0,0,0,0,71,72,72,0,83,154,83,154,83,0,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,0,154,83,154,83,154,0,72,72,0,0,0,0,0},
+		{0,0,0,0,71,72,72,72,72,72,72,72,72,72,72,72,73,0,0,0,0},
+		{0,0,0,0,0,72,72,72,0,72,0,72,0,72,72,72,0,0,0,0,0},
+		{0,0,0,0,72,0,0,72,72,72,0,72,72,72,0,0,72,0,0,0,0},
+		{0,0,0,0,72,0,0,0,72,72,72,72,72,0,0,0,72,0,0,0,0},
+		{0,0,0,0,72,0,0,72,0,0,0,0,0,72,0,0,72,0,0,0,0},
+		{0,0,0,71,72,73,73,73,73,0,0,0,73,73,73,73,72,72,0,0,0},
+		{0,0,0,72,72,72,72,72,72,73,73,73,72,72,72,72,72,72,0,0,0},
+		{0,73,73,72,0,0,0,0,0,72,72,72,0,0,0,0,0,72,73,73,0},
+		{0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
+		{0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
+	}};
+	int iniX = x;
+	int iniY = y;
+	gotoxy(x, y);
+	for (y=0;y<28;y++ ){
+
+		for (x=0;x<24;x++){
+			if (x==0 && y>0) gotoxy(iniX,y+iniY);
+			Sleep(1);
+			paintearD(terminator[numTer][y][x]);
 
 		}
 	}
@@ -205,7 +293,7 @@ void imprimir_menu()
 int menu()
 {
 	system("cls");
-	imprimir_terminator(XTER,YTER);
+	imprimir_terminator(XTER,YTER,0);
 	imprimir_menu();
 	int opcion = 0;
 	gotoxy(40,27);
@@ -244,7 +332,7 @@ void instrucciones()
    char c;
    int pag=1,hudX=5;
    cuadroTF("       I N S T R U C C I O N E S       ",hudX+5,0,AZUL_INTENSO,VERDEI);
-   imprimir_terminator(65,1);
+   imprimir_terminator(XTER,YTER,0);
    cuadroT("  a : retroceder | d : avanzar | m : volver al menu  ",hudX-1,27,AZUL_INTENSO);
    do{
 
@@ -260,8 +348,17 @@ void instrucciones()
         break;
     }
     gotoxy(27,25);
-    printf("<<%i/3>>",pag);
-
+    setT(VERDEI);
+    printf("<<");
+    setD();
+    printf("%i",pag);
+    setT(VERDEI);
+    printf("/");
+    setD();
+    printf("3",pag);
+    setT(VERDEI);
+    printf(">>",pag);
+	setD();
 
 
     c=getch();
@@ -364,6 +461,7 @@ void juego(struct juego data)
 
 	int jugador_empieza = data.moneda;
     do{ //partida
+    	system("cls");
         data.partidas++;
 
         if(data.partidas%2!=data.moneda) partida(data.nombreEscritor,&data.puntosEscritor,data.nombreAdivinador,&data.puntosAdivinador,diccionario, jugador_empieza, data.idJuego);
@@ -371,7 +469,6 @@ void juego(struct juego data)
 
         if(jugador_empieza) jugador_empieza = 0;
 		else jugador_empieza = 1;
-		printf("Puntos %s: %i\n\nPuntos %s: %i",data.nombreEscritor,data.puntosEscritor,data.nombreAdivinador,data.puntosAdivinador);
 
     }while(continuar()==1);
     game_over(data.nombreEscritor,data.puntosEscritor,data.nombreAdivinador,data.puntosAdivinador,data.partidas);
@@ -411,7 +508,8 @@ void ingresar_nombre(char palabra[])
     gets(palabra);
     while (es_texto(palabra)!=0)
     {
-        printf("ERROR\n« Ingrese una palabra usando solo letras: ");
+
+		printf("ERROR\n« Ingrese una palabra usando solo letras: ");
         fflush(stdin);
         gets(palabra);
     }
@@ -420,33 +518,33 @@ void ingresar_nombre(char palabra[])
 
 void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char diccionario[][TPALABRA], int jugador_empieza, int idJuego)
 {
+	imprimir_terminator(XTER,YTER,0);
     int intentos=0;
     int reintentar=1;
     int ganoj2 = 0;
-    int hudx=0,hudy=0;
+    int hudx=2,hudy=1;
     int x=0;
     char palabraj1[LMAX],palabraj2[LMAX];
-    cuadroSTlati("Puntos %s :",hudx+0,hudy+3,MAGENTA,nombrej1);
-    x=relocate_x(strlen("Puntos %s :"),strlen(nombrej1),0,hudx+0);
-    cuadroIThori(" %02i  | ",x,hudy+3,MAGENTA,*puntosj1);
+    
+    cuadroIT(" ID: %03i ",hudx+0, hudy,AZUL,idJuego);
+    cuadroSTlati(" Puntos %s :",hudx+12,hudy+0,MAGENTA,nombrej1);
+    x=relocate_x(strlen(" Puntos %s :"),strlen(nombrej1),0,hudx+12);
+    cuadroIThori(" %02i  | ",x,hudy+0,MAGENTA,*puntosj1);
     x=relocate_x(strlen(" %i  | "),2,0,x);
-    cuadroSThori("Puntos %s",x,hudy+3,MAGENTA,nombrej2);
+    cuadroSThori("Puntos %s",x,hudy+0,MAGENTA,nombrej2);
     x=relocate_x(strlen("Puntos %s"),strlen(nombrej2),0,x);
-    cuadroITlatd(" %02i ",x,hudy+3,MAGENTA,*puntosj2);
+    cuadroITlatd(" %02i ",x,hudy+0,MAGENTA,*puntosj2);
 
 
-    cuadroST(" %s ingrese una palabra:                          ",hudx+0,hudy+6,MAGENTA,nombrej1);
-    //printf("%s ingrese una palabra: ",nombrej1);
-    gotoxy(33,7);
-    ingresar_palabra(palabraj1,diccionario);
+    cuadroST("   %s ingrese una palabra:                               ",hudx+0,hudy+3,COLOR_ESCRI,nombrej1);
+    ingresar_palabra(palabraj1,diccionario, COLOR_ESCRI,relocate_x(strlen(" %s ingrese una palabra:"),strlen(nombrej1),2,hudx),hudy + 4);
 
     do{//intentos
         intentos++;
-        cuadroST(" %s ",hudx+12,hudy+0,MAGENTA,palabraj1);
-        cuadroST(" %s ingrese una palabra:                          ",hudx+0,hudy+6,MAGENTA,nombrej2);
-        //printf("%s ingrese una palabra: ",nombrej2);
-        gotoxy(33,7);
-        ingresar_palabra(palabraj2,diccionario);
+        //arreglar la palabra
+    	cuadroST(" Debes buscar un anagrama de esta palabra: %s",hudx+0,hudy+3,COLOR_ESCRI,palabraj1);
+        cuadroST(" %s ingrese una palabra:                          ",hudx+0,hudy+6,COLOR_ADIV,nombrej2);
+        ingresar_palabra(palabraj2,diccionario, COLOR_ADIV,relocate_x(strlen(" %s ingrese una palabra:"),strlen(nombrej2),2,hudx),hudy + 7);
         if (strcmp(palabraj1,palabraj2)==0)reintentar=reintentar_menu(intentos);
         else
 		{
@@ -517,7 +615,6 @@ int setearIdJuego()
 	fread(&l, sizeof(struct log), 1, f);
 	fclose(f);
 
-	cuadroIT(" ID: %03i ",0,0,AZUL,cantidadJuegos+1);
 	//printf("ID de juego: %d\n\n",cantidadJuegos + 1);
 	return cantidadJuegos + 1;
 }
@@ -551,9 +648,8 @@ void mostrarEstadisticas()
 		fread(&l, sizeof(struct log), 1, f);
 	}
 	int hudX = 10;
-	imprimir_terminator(65,1);
-	do{
-        cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
+	imprimir_terminator(XTER,YTER,0);
+	cuadroTF("        E S T A D I S T I C A S        ",hudX+0,0,AZUL,VERDEI);
 
 
         cuadroITtop("          Juegos totales: %03d          ",hudX+0,3,MAGENTA,cantidadJuegos);
@@ -566,25 +662,10 @@ void mostrarEstadisticas()
         cuadroFTbot("        Gana Adivinador: %.2f %%       ",hudX+0,17,MAGENTA,(float)jugadorGanador * 100 / cantidadPartidas);
         printf("\n");
         cuadroT(" m : volver al menu  ",hudX+10,25,AZUL_INTENSO);
-        c=getch();
-
-	}while(c!='m');
-
-
-
-
-	//printf("Intentos: %d | Partidas: %d | Juegos: %d | Ganador Escribe: %d | Ganador Adivina: %d | Empieza J1: %d", cantidadIntentosTotal, cantidadPartidas, cantidadJuegos, cantidadPartidas - jugadorGanador , jugadorGanador, cantidadJuegos - jugadorEmpieza);
-	//printf("Juegos totales: %d\n", cantidadJuegos);
-	//printf("Partidas totales: %d\n", cantidadPartidas);
-	//printf("Partidas por juego: %f\n",(float) cantidadPartidas / cantidadJuegos );
-	//printf("Promedio intento por partida: %f\n",(float) cantidadIntentosTotal / cantidadPartidas);
-	//printf("Porcentaje de veces que inicio el Jugador 1: %f\n",(float) (cantidadJuegos - jugadorEmpieza) * 100 / cantidadJuegos);
-	//printf("Porcentaje de veces que inicio el Jugador 2: %f\n",(float) jugadorEmpieza * 100 / cantidadJuegos);
-	//printf("Porcentaje de veces que gano el Escritor: %f\n",(float) (cantidadPartidas - jugadorGanador) * 100 / cantidadPartidas);
-	//printf("Porcentaje de veces que gano el Adivinador: %f\n\n",(float)  jugadorGanador * 100 / cantidadPartidas);
+	do{
+	}while(getch()!='m');
 
 }
-
 
 struct juego cargadorPartida()
 {
@@ -631,64 +712,88 @@ struct juego cargadorPartida()
 
 }
 
+void borrar(int inix, int iniy, int endx, int endy){
+	int x, y;
+	setD();
+	for(y = iniy; y < endy; y++){
+		for(x = inix; x < endx; x++){
+			gotoxy(x,y);
+			printf(" ");	
+		}
+	}	
+}
+
 
 int continuar()
 {
 	int respuesta;
-	printf("\nDesea jugar otra partida?");
-	printf("\n1. Si");
-	printf("\n2. No");
-	printf("\nRespuesta: ");
+	int hudX = 10;
+	int hudY = 11;
+	cuadroTtop("    Fin de la partida!   ",hudX,hudY,MARRON);
+	cuadroTmid("Desea jugar otra partida?",hudX,hudY + 2,MARRON);
+	cuadroTmid("   1. Si        2. No    ",hudX,hudY + 4,MARRON);
+	cuadroTbot("         << >>           ",hudX,hudY + 6,MARRON);
 	fflush(stdin); // tuve que googlearlo para que ande
+	gotoxy(hudX + 12,hudY + 7);
 	scanf("%d",&respuesta);
+	borrar(hudX, hudY,hudX + 28, hudY + 9);
 	return respuesta;
 }
+
 
 int reintentar_menu(int intentos)
 {
+	imprimir_terminator(XTER, YTER,2);
 	if(intentos >= 3) return 0;
 	int respuesta;
-	cuadroTtop("Lo siento!              ",0,9,MAGENTA);
-	cuadroTmid("Desea intentar de nuevo?",0,11,MAGENTA);
-	cuadroTmid("   1. Si        2. No   ",0,13,MAGENTA);
-	cuadroTbot("         << >>          ",0,15,MAGENTA);
-	//printf("Lo siento!");
-	//printf("\nDesea intentar de nuevo?");
-	//printf("\n1. Si");
-	//printf("\n2. No");
-	//printf("\nRespuesta: ");
+	int hudX = 10;
+	int hudY = 11;
+	cuadroTtop("        Lo siento!       ",hudX,hudY,MAGENTA);
+	cuadroTmid("Desea intentar de nuevo? ",hudX,hudY + 2,MAGENTA);
+	cuadroTmid("   1. Si        2. No    ",hudX,hudY + 4,MAGENTA);
+	cuadroTbot("         << >>           ",hudX,hudY + 6,MAGENTA);
 	fflush(stdin); // tuve que googlearlo para que ande
-	gotoxy(12,16);
+	gotoxy(hudX + 12,hudY + 7);
 	scanf("%d",&respuesta);
+	imprimir_terminator(XTER, YTER,1);
+	borrar(hudX, hudY,hudX + 28, hudY + 9);
+	
+	
 	return respuesta;
 }
 
-void ingresar_palabra(char palabra[], char diccionario[][TPALABRA])
-{
+void ingresar_palabra(char palabra[], char diccionario[][TPALABRA], int color, int x, int y)
+{	
+	gotoxy(x,y);
     fflush(stdin);
     gets(palabra);
     while (buscar_palabra(diccionario,palabra)!=0)
     {
-    	setTF(BLANCO,ROJO);
-    	gotoxy(0,9);
+        cuadroTBF("ERROR",7,y+2,ROJO,BLANCO,ROJO);
+        setTF(BLANCO, ROJO);
+        gotoxy(83,10);
         printf("ERROR");
-        setT(GRIS_CLARO);
-		printf("Ingrese una palabra valida... ");
+        gotoxy(94,10);
+        printf("ERROR");
+        setD();
+        int pos = relocate_x(strlen("ERROR"),0,6,7);
+        cuadroTF(" Ingrese una palabra valida...  ", pos ,y+2,AZULI, VERDEI);
+        pos = relocate_x(strlen(" Ingrese una palabra valida...  "),0,6,pos);
+        cuadroTBF("ERROR",pos,y+2,ROJO,BLANCO,ROJO);
         fflush(stdin);
-        cuadroTlatd("                        ",33,6,MAGENTA);
-        gotoxy(33,7);
+        borrar(x, y, x + 30, y + 1);
+        gotoxy(x,y);
         gets(palabra);
+        borrar(7, y+2, pos + 8, y + 6);
+        imprimir_terminator(XTER, YTER,1);
     }
-    gotoxy(0,9);
-    printf("                                           ");
-
 }
 
 int buscar_palabra(char dicci[][TPALABRA], char palabra[])
 {
     int i = 0;
     while(strcmp(palabra,dicci[i])!=0 && i < TDICC) i++;
-    printf("\nNumero de palabra: %i\n",i);
+    //printf("\nNumero de palabra: %i\n",i);
     if(i != TDICC) return 0;
     else return 1;
 }
@@ -743,6 +848,8 @@ void game_over(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int par
         if(puntosj1 == puntosj2) printf("\n\n>> Empate! Ambos ganan");
         else printf("\n\n>> GANO %s!!!",strupr(nombrej2));
     }
+    
+    system("pause");
 }
 
 

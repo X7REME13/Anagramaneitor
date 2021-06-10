@@ -12,6 +12,7 @@
 #define GRIS_CLARO 0X0007
 #define GRIS_OSCURO 0X0008
 #define AZUL_INTENSO 0X0009
+#define AZULI 0X0009
 #define VERDE_INTENSO 0X000A
 #define VERDEI 0X000A
 #define CIAN_INTENSO 0X000B
@@ -24,6 +25,7 @@
 #define JOHI 0X000E
 #define BLANCO_INTENSO 0X000F
 #define BLANCO 0X000F
+#define BLANCOI 0X000F
 //---------------------------------
 
 //----------------------------------------------------------------------------
@@ -250,6 +252,27 @@ void cuadroTF(const char *text,int x,int y,int ColorBorde,int ColorTexto){
 
 
 }
+
+void cuadroTBF(const char *text,int x,int y,int ColorBorde,int ColorTexto, int ColorFondo){
+	int top[3]={1,4,5};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,6,};
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF (x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	setTF(ColorTexto, ColorFondo);
+	printf ("%s",text);
+	setD();
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
 
 void itemsNum(int cantItems, int x, int y,int color){
 
