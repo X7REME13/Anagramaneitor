@@ -483,6 +483,162 @@ void cuadroFTbot(const char *textFormat,int x,int y,int ColorBorde, float variab
 
 }
 
+//Asi como tengo top mid y bot, necesito lati, hori y latd para hacer cuadros a lo ancho
+void cuadroTlatd(const char *text,int x,int y,int ColorBorde){
+	int top[3]={2,0,2};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,6,};
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+}
+
+void cuadroITlati(const char *textFormat,int x,int y,int ColorBorde, int variable){
+	int top[3]={1,4,5};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={2,0,2,};
+
+	char text[50];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+void cuadroIThori(const char *textFormat,int x,int y,int ColorBorde, int variable){
+	int top[3]={2,0,2};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={2,0,2,};
+
+	char text[50];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+void cuadroITlatd(const char *textFormat,int x,int y,int ColorBorde, int variable){
+	int top[3]={2,0,2};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,6,};
+
+	char text[50];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+
+void cuadroSTlati(const char *textFormat,int x,int y,int ColorBorde, char * variable){
+	int top[3]={1,4,5};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={2,0,2,};
+
+	char text[70];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+void cuadroSThori(const char *textFormat,int x,int y,int ColorBorde, char * variable){
+	int top[3]={2,0,2};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={2,0,2,};
+
+	char text[70];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+void cuadroSTlatd(const char *textFormat,int x,int y,int ColorBorde, char * variable){
+	int top[3]={2,0,2};
+	int midS[3]={2,0,2,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={3,4,6,};
+
+	char text[70];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
 
 
 //--------------------------------------------------------------------

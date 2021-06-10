@@ -16,6 +16,7 @@
 #define XTER 65
 #define YTER 1
 
+
 #include "VIDEO.c"
 
 
@@ -422,17 +423,29 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
     int intentos=0;
     int reintentar=1;
     int ganoj2 = 0;
+    int hudx=0,hudy=0;
+    int x=0;
     char palabraj1[LMAX],palabraj2[LMAX];
-    cuadroST(" %s ingrese una palabra:                          ",0,4,MAGENTA,nombrej1);
+    cuadroSTlati("Puntos %s :",hudx+0,hudy+3,MAGENTA,nombrej1);
+    x=relocate_x(strlen("Puntos %s :"),strlen(nombrej1),0,hudx+0);
+    cuadroIThori(" %02i  | ",x,hudy+3,MAGENTA,*puntosj1);
+    x=relocate_x(strlen(" %i  | "),2,0,x);
+    cuadroSThori("Puntos %s",x,hudy+3,MAGENTA,nombrej2);
+    x=relocate_x(strlen("Puntos %s"),strlen(nombrej2),0,x);
+    cuadroITlatd(" %02i ",x,hudy+3,MAGENTA,*puntosj2);
+
+
+    cuadroST(" %s ingrese una palabra:                          ",hudx+0,hudy+6,MAGENTA,nombrej1);
     //printf("%s ingrese una palabra: ",nombrej1);
-    gotoxy(33,5);
+    gotoxy(33,7);
     ingresar_palabra(palabraj1,diccionario);
 
     do{//intentos
         intentos++;
-        cuadroST(" %s ingrese una palabra:                          ",0,4,MAGENTA,nombrej2);
+        cuadroST(" %s ",hudx+12,hudy+0,MAGENTA,palabraj1);
+        cuadroST(" %s ingrese una palabra:                          ",hudx+0,hudy+6,MAGENTA,nombrej2);
         //printf("%s ingrese una palabra: ",nombrej2);
-        gotoxy(33,5);
+        gotoxy(33,7);
         ingresar_palabra(palabraj2,diccionario);
         if (strcmp(palabraj1,palabraj2)==0)reintentar=reintentar_menu(intentos);
         else
@@ -458,6 +471,17 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
 
 }
 
+int relocate_x(int largo_acompanamiento, int largo_variable, int espaciado,int hudx)  //espaciado es si quiero que el cuadro quede pegado o separado
+{
+   int dist_x=largo_acompanamiento+largo_variable+espaciado;
+   return hudx+dist_x;
+}
+
+int relocate_y(int posicion,int hudy) // 0 para = linea, 3 para u renglon abajo y asi
+{
+    int dist_y=hudy+posicion;
+    return dist_y;
+}
 void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int intentos, int ganador, int jugador_empieza)
 {
 	struct log log_partida;
@@ -624,12 +648,17 @@ int reintentar_menu(int intentos)
 {
 	if(intentos >= 3) return 0;
 	int respuesta;
-	printf("Lo siento!");
-	printf("\nDesea intentar de nuevo?");
-	printf("\n1. Si");
-	printf("\n2. No");
-	printf("\nRespuesta: ");
+	cuadroTtop("Lo siento!              ",0,9,MAGENTA);
+	cuadroTmid("Desea intentar de nuevo?",0,11,MAGENTA);
+	cuadroTmid("   1. Si        2. No   ",0,13,MAGENTA);
+	cuadroTbot("         << >>          ",0,15,MAGENTA);
+	//printf("Lo siento!");
+	//printf("\nDesea intentar de nuevo?");
+	//printf("\n1. Si");
+	//printf("\n2. No");
+	//printf("\nRespuesta: ");
 	fflush(stdin); // tuve que googlearlo para que ande
+	gotoxy(12,16);
 	scanf("%d",&respuesta);
 	return respuesta;
 }
@@ -641,12 +670,17 @@ void ingresar_palabra(char palabra[], char diccionario[][TPALABRA])
     while (buscar_palabra(diccionario,palabra)!=0)
     {
     	setTF(BLANCO,ROJO);
+    	gotoxy(0,9);
         printf("ERROR");
         setT(GRIS_CLARO);
-		printf("\nIngrese una palabra valida: ");
+		printf("Ingrese una palabra valida... ");
         fflush(stdin);
+        cuadroTlatd("                        ",33,6,MAGENTA);
+        gotoxy(33,7);
         gets(palabra);
     }
+    gotoxy(0,9);
+    printf("                                           ");
 
 }
 
