@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1623370671 source:c:\users\admin\documents\github\anagramaneitor\este si\lectologs\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+

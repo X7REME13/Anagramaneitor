@@ -26,6 +26,10 @@
 #define BLANCO_INTENSO 0X000F
 #define BLANCO 0X000F
 #define BLANCOI 0X000F
+#define ROJOJO 0X0007
+
+
+
 //---------------------------------
 
 //----------------------------------------------------------------------------
@@ -253,7 +257,7 @@ void cuadroTF(const char *text,int x,int y,int ColorBorde,int ColorTexto){
 
 }
 
-void cuadroTBF(const char *text,int x,int y,int ColorBorde,int ColorTexto, int ColorFondo){
+void cuadroBTF(const char *text,int x,int y,int ColorBorde,int ColorTexto, int ColorFondo){
 	int top[3]={1,4,5};
 	int midS[3]={2,0,2,};
 	//int midL[3]={7,8,7,};
@@ -314,7 +318,7 @@ void paintearD (int unit){
 
 void cuadroTtop(const char *text,int x,int y,int ColorBorde){
 	int top[3]={1,4,4};
-	int midS[3]={2,0,2,};
+	int midS[3]={2,0,0,};
 	//int midL[3]={7,8,7,};
 	int bot[3]={3,4,4,};
 
@@ -369,7 +373,7 @@ void cuadroTbot(const char *text,int x,int y,int ColorBorde){
 
 void cuadroITtop(const char *textFormat,int x,int y,int ColorBorde, int variable){
 	int top[3]={1,4,4};
-	int midS[3]={2,0,2,};
+	int midS[3]={2,0,0,};
 	//int midL[3]={7,8,7,};
 	int bot[3]={3,4,4,};
 
@@ -664,4 +668,49 @@ void cuadroSTlatd(const char *textFormat,int x,int y,int ColorBorde, char * vari
 }
 
 
+void cuadroST_gral(const char *textFormat,int x,int y,int ColorBorde, char * variable,int t1,int t2,int t3,int m1, int m2, int m3, int b1, int b2, int b3){
+	int top[3]={t1,t2,t3};
+	int midS[3]={m1,m2,m3,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={b1,b2,b3,};
+
+	char text[70];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+void cuadroIT_gral(const char *textFormat,int x,int y,int ColorBorde, int variable,int t1,int t2,int t3,int m1, int m2, int m3, int b1, int b2, int b3){
+	int top[3]={t1,t2,t3};
+	int midS[3]={m1,m2,m3,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={b1,b2,b3,};
+
+	char text[50];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
 //--------------------------------------------------------------------
