@@ -16,25 +16,22 @@
 #define VERDE_INTENSO 0X000A
 #define VERDEI 0X000A
 #define CIAN_INTENSO 0X000B
+#define CIANI 0X000B
 #define ROJO_INTENSO 0X000C
 #define ROJOI 0X000C
 #define MAGENTA_INTENSO 0X000D
 #define MAGENTAI 0X000D
 #define AMARILLO_INTENSO 0X000E
 #define AMARILLOI 0X000E
-#define JOHI 0X000E
-#define BLANCO_INTENSO 0X000F
 #define BLANCO 0X000F
 #define BLANCOI 0X000F
-#define ROJOJO 0X0007
+#define BLANCO_INTENSO 0X000F
+//-----------ABREVIACIONES-----------
+#define setD setDefault
+#define setT setTexto
+#define setTF setTextoFondo
 
 
-
-//---------------------------------
-
-//----------------------------------------------------------------------------
-//------- FUNCIONES RESERVADAS PARA VIDEO ------------------------------------
-//----------------------------------------------------------------------------
 void gotoxy(int x, int y){
         HANDLE hCon;
         hCon=GetStdHandle(STD_OUTPUT_HANDLE);
@@ -44,19 +41,19 @@ void gotoxy(int x, int y){
         SetConsoleCursorPosition(hCon,dwPos);
 }
 
-void setD() {
+void setDefault() {
     HANDLE hCon;
     hCon=GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute (hCon,GRIS_CLARO);
 }
 
-void setT(int texto) {
+void setTexto(int texto) {
     HANDLE hCon;
     hCon=GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute (hCon,texto);
 }
 
-void setTF(int texto, int fondo){
+void setTextoFondo(int texto, int fondo){
     HANDLE hCon;
     int numero;
     hCon=GetStdHandle(STD_OUTPUT_HANDLE);
@@ -64,11 +61,12 @@ void setTF(int texto, int fondo){
 	SetConsoleTextAttribute (hCon,numero);
 }
 
-void settitle (const char *texto){
+void setTitle (const char *texto){
     SetConsoleTitle(texto);
 }
 
-
+//creador en C++: Pablo Lavezzi
+//traduccion a C: Matias Picon
 
 void paintF(int x, int y, int *figura,int limY,int limX,int color){
 
