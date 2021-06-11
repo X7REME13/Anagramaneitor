@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1623370232 source:c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\main.c
+1623388324 source:c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -13,7 +13,7 @@
 	<windows.h>
 	<stdio.h>
 
-1623367689 c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\video.c
+1623386334 c:\users\admin\documents\github\anagramaneitor\este si\anagramaneitor\video.c
 	<windows.h>
 	<stdio.h>
 

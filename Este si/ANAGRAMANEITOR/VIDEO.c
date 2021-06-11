@@ -668,6 +668,44 @@ void cuadroSTlatd(const char *textFormat,int x,int y,int ColorBorde, char * vari
 }
 
 
+
+void cuadroT_gral(const char *text,int x,int y,int ColorBorde,int t1,int t2,int t3,int m1,int m2,int m3,int b1,int b2,int b3){
+	int top[3]={t1,t2,t3};
+	int midS[3]={m1,m2,m3,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={b1,b2,b3,};
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+}
+
+void cuadroTF_gral(const char *text,int x,int y,int ColorBorde,int ColorTexto,int t1,int t2,int t3,int m1, int m2,int m3,int b1,int b2, int b3){
+	int top[3]={t1,t2,t3};
+	int midS[3]={m1,m2,m3,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={b1,b2,b3,};
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF (x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	setT(ColorTexto);
+	printf ("%s",text);
+	setD();
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
 void cuadroST_gral(const char *textFormat,int x,int y,int ColorBorde, char * variable,int t1,int t2,int t3,int m1, int m2, int m3, int b1, int b2, int b3){
 	int top[3]={t1,t2,t3};
 	int midS[3]={m1,m2,m3,};
@@ -692,6 +730,29 @@ void cuadroST_gral(const char *textFormat,int x,int y,int ColorBorde, char * var
 }
 
 void cuadroIT_gral(const char *textFormat,int x,int y,int ColorBorde, int variable,int t1,int t2,int t3,int m1, int m2, int m3, int b1, int b2, int b3){
+	int top[3]={t1,t2,t3};
+	int midS[3]={m1,m2,m3,};
+	//int midL[3]={7,8,7,};
+	int bot[3]={b1,b2,b3,};
+
+	char text[50];
+
+	sprintf(text,textFormat,variable);
+
+
+	int len=strlen(text) + 1;
+
+	paintF (x,y,top,3,1,ColorBorde);
+	int j;
+	for (j=1;j<len;j++)	paintF(x+j,y,midS,3,1,ColorBorde);
+	gotoxy(x+1,y+1);
+	printf ("%s",text);
+	paintF (x+len,y,bot,3,1,ColorBorde);
+
+
+}
+
+void cuadroFT_gral(const char *textFormat,int x,int y,int ColorBorde, float variable,int t1,int t2,int t3,int m1, int m2, int m3, int b1, int b2, int b3){
 	int top[3]={t1,t2,t3};
 	int midS[3]={m1,m2,m3,};
 	//int midL[3]={7,8,7,};
