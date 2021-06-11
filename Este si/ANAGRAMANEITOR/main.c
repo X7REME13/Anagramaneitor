@@ -96,8 +96,7 @@ void bienvenida()
 	}
 }
 
-void imprimir_terminator(int x, int y, int numTer)
-{
+void imprimir_terminator(int x, int y, int numTer){
 	int terminator[4][30][24]={
 	{
 		{0,0,0,0,0,0,71,71,71,72,72,72,72,72,72,0,0,0,0,0,0},
@@ -186,6 +185,7 @@ void imprimir_terminator(int x, int y, int numTer)
         {0,72,72,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,72,72,0},
         {0,0,0,72,72,72,72,72,72,71,0,72,72,72,72,72,72,72,0,0,0}
     }};
+	
 	int iniX = x;
 	int iniY = y;
 	gotoxy(x, y);
@@ -198,7 +198,6 @@ void imprimir_terminator(int x, int y, int numTer)
 
 		}
 	}
-
 }
 
 void imprimir_terminator_lento(int x, int y, int numTer)
@@ -594,8 +593,8 @@ void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int
 	log_partida.intentos = intentos;
 	log_partida.ganador = ganador;
 	log_partida.jugador_empieza = jugador_empieza;
-
-//	printf("\n\n%d: %s | %d | %d | %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
+	gotoxy(0,25);
+	printf("\n\n%d: %s | %d | %d | %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugador_empieza);
 
 	FILE* f = fopen("log.dat","ab");
 	fwrite(&log_partida, sizeof(struct log), 1, f);
@@ -705,7 +704,7 @@ struct juego cargadorPartida()
 	while (!feof(f))
 	{
 		if( l.idJuego == idJuego){
-			if(!l.ganador)	data.puntosEscritor++;
+			if(l.ganador == l.jugador_empieza)	data.puntosEscritor++;
 			else data.puntosAdivinador++;
 			data.partidas++;
 		}

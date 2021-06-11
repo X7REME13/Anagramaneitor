@@ -129,7 +129,7 @@ int main(){
 	
 	
 	
-	
+	system("pause");
 	
 }
 
