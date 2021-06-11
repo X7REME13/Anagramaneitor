@@ -522,6 +522,12 @@ int cargar_diccionario(char diccionario[][TPALABRA])
     FILE *dicc;
     dicc = fopen(FILE_DICC,"rt");
     if(!dicc){
+        borrar(2,1,XTER-1,7);
+        cuadroBT("    E  R  R  O  R   ",20,5,ROJO,BLANCO);
+        cuadroBT(" No se encontro el archivo del diccionario ",10,12,ROJO,BLANCO);
+        imprimirTerminator(XTER,YTER,2);
+        cuadroBT(" m : volver al menu  ",20,26,GRIS_OSCURO,VERDEI);
+    	while(getch()!='m');
     	return 1;
 	}
     char c;
@@ -635,7 +641,7 @@ void partida(char nombrej1[],int *puntosj1,char nombrej2[], int *puntosj2,char d
 
 void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int intentos, int ganador, int jugadorEmpieza)
 {
-	
+
 	struct log log_partida;
 	log_partida.idJuego = idJuego;
 	strcpy(log_partida.anagrama, anagrama);
@@ -644,7 +650,7 @@ void crear_log(int idJuego,char anagrama[], char nombrej1[], char nombrej2[],int
 	log_partida.intentos = intentos;
 	log_partida.ganador = ganador; // 0 es que gano el escritor | 1 es que gano el adivinador
 	log_partida.jugadorEmpieza = jugadorEmpieza;
-	
+
 	//DEBUG
 	//gotoxy(0,25);
 	//printf("\n\n%d: %s | %d | %d | %d\n\n",log_partida.idJuego, log_partida.anagrama, log_partida.intentos, log_partida.ganador, log_partida.jugadorEmpieza);
@@ -678,17 +684,17 @@ int setearIdJuego()
 void mostrarEstadisticas()
 {
 	system("cls");
-	
+
 	//logica
 	FILE* f = fopen(FILE_LOG,"rb");
 	struct log l;
-	
+
 	int cantidadPartidas = 0;
 	int cantidadJuegos = 0;
 	int cantidadIntentosTotal = 0;
 	int ganaAdivinador = 0;
 	int jugadorEmpieza = 0;
-	
+
 	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f))
 	{
@@ -705,9 +711,9 @@ void mostrarEstadisticas()
 
 		fread(&l, sizeof(struct log), 1, f);
 	}
-	
-	
-	
+
+
+
 	//interfaz
 	int hudX = 10,hudY=3;
 	imprimirTerminator(XTER,YTER,0);
@@ -721,7 +727,7 @@ void mostrarEstadisticas()
     cuadroBFU("         Gana Escritor: %5.1f %%        ",hudX+0,hudY+15,MARRON,(float)(cantidadPartidas - ganaAdivinador) * 100 / cantidadPartidas,4,4,4,0,0,0,4,4,4);
     cuadroBFU("        Gana Adivinador: %5.1f %%       ",hudX+0,hudY+17,MARRON,(float)ganaAdivinador * 100 / cantidadPartidas,4,4,5,0,0,2,4,4,6);
     cuadroBT(" m : volver al menu  ",hudX+10,26,GRIS_OSCURO,VERDEI);
-	
+
 	while(getch()!='m');
 
 }
@@ -729,7 +735,7 @@ void mostrarEstadisticas()
 struct juego cargadorPartida()
 {
 	int idJuego;
-	
+
 	//interfaz
 	imprimirTerminator(XTER,YTER,1);
 	cuadroBTU("   R E C U P E R A R   P A R T I D A   ",15,1,GRIS_OSCURO,VERDEI,1,4,5,2,0,2,3,4,6);
@@ -737,7 +743,7 @@ struct juego cargadorPartida()
 	cuadroBTU(" Para volver al menu, ingrese 0 ",18,26,GRIS_OSCURO,VERDEI,1,4,5,2,0,2,3,4,6);
 	gotoxy(relocate_x(strlen(" Ingrese su ID de juego: << "),0,0,18),14);
 	scanf("%d",&idJuego);
-	
+
 	//logica
 	struct log l;
 	struct juego data;
@@ -746,20 +752,20 @@ struct juego cargadorPartida()
         data.idJuego=-999;
         return data;
 	}
-	
+
 	FILE* f = fopen(FILE_LOG,"rb");
 	fread(&l, sizeof(struct log), 1, f);
 	while (!feof(f) && l.idJuego != idJuego)
 	{
 		fread(&l, sizeof(struct log), 1, f);
 	}
-	
+
 	//si no encuentra el log de tu partida, te pide que crees una nueva
 	if( l.idJuego != idJuego){
 		return setearData();
-	} 
-	
-	
+	}
+
+
 	data.idJuego = l.idJuego;
 	data.moneda = l.jugadorEmpieza;
 	if(!l.jugadorEmpieza) { //false = 0 !-> true
@@ -800,7 +806,7 @@ int continuar()
 	cuadroBU("Desea jugar otra partida?",hudX,hudY + 2,MARRON,4,4,4,0,0,0,4,4,4);
 	cuadroBU("   1. Si        2. No    ",hudX,hudY + 4,MARRON,4,4,4,0,0,0,4,4,4);
 	cuadroBU("          << >>          ",hudX,hudY + 6,MARRON,4,4,5,0,0,2,4,4,6);
-	fflush(stdin); 
+	fflush(stdin);
 	gotoxy(hudX + 13,hudY + 7);
 	scanf("%d",&respuesta);
 	borrar(hudX, hudY,hudX + 28, hudY + 9);
@@ -886,7 +892,7 @@ int esAnagrama(char cad1[], char cad2[])
 	//!!a baA cont=2
 	//!!! baA cont=3
 	//cont 3 == lcad 3 -> true
-	
+
     if(lcad==strlen(cad2))
     {
         for (i=0;i<lcad;i++)
@@ -943,7 +949,7 @@ void gameOver(char nombrej1[],int puntosj1,char nombrej2[],int puntosj2,int part
         Sleep(100);
 
     }
-    
+
 	while(getch()!='m');
 }
 
@@ -964,16 +970,16 @@ void creditos()
     cuadroBTU("            Programado por:            ",hudX+0,hudY+3,MARRON,MAGENTA,1,4,4,2,0,0,3,4,4); //top
     cuadroBTU("       Matias G. Picon (X7REME13)      ",hudX+0,hudY+5,MARRON,AZUL,4,4,4,0,0,0,4,4,4); //mids
     cuadroBTU("     Marcelo G. Ulrich (Marchelox)     ",hudX+0,hudY+7,MARRON,CIAN_INTENSO,4,4,5,0,0,2,4,4,6); //bot
-   
+
     cuadroBTU("           Agradecimientos:            ",hudX+0,hudY+11,MARRON,MAGENTA,1,4,4,2,0,0,3,4,4); //top
     cuadroBU("A Luna Cosentino por la idea del juego.",hudX+0,hudY+13,MARRON,4,4,4,0,0,0,4,4,4); //mids
     cuadroBU("A Rolo por bancarnos e impulsarnos a   ",hudX+0,hudY+15,MARRON,4,4,4,0,0,0,4,4,4);
     cuadroBU("       realizar este proyecto.         ",hudX+0,hudY+17,MARRON,4,4,4,0,0,0,4,4,4);
     cuadroBU("A Johi por ayudarnos con la estetica.  ",hudX+0,hudY+19,MARRON,4,4,4,0,0,0,4,4,4);
     cuadroBU("A Pablo Lavezzi por la libreria VIDEO. ",hudX,hudY+21,MARRON,4,4,5,0,0,2,4,4,6); //bot
-    
+
 	cuadroBT(" m : volver al menu  ",hudX+10,27,GRIS_OSCURO,VERDEI);
-    
+
 	while(getch()!='m');
 
 }
