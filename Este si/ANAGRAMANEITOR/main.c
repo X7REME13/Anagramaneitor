@@ -98,7 +98,7 @@ void creditos();
 int main()
 {
 	setTitle("<<< ANAGRAMANEITOR >>> By MUMP");
-	//bienvenida();
+	bienvenida();
 	do{
 	}while(menu() != 99);
 }
@@ -108,11 +108,10 @@ void bienvenida()
 {
 	imprimirTerminatorLento(10,YTER, 1);
 	int i;
-	for(i = 0; i < (XTER-10)/2; i++){
+	for(i = 0; i < (XTER-10); i++){
 
-		imprimirTerminator(10+(i*2), YTER,1);
-		//gotoxy(0,0);
-		Sleep(80);
+		imprimirTerminator(10+(i), YTER,1);
+		Sleep(40);
 	}
 }
 
@@ -239,7 +238,7 @@ void imprimirTerminator(int x, int y, int numTer){
 	int iniY = y;
 	gotoxy(x, y);
 	for (y=0;y<27;y++ ){
-		for (x=0;x<23;x++){
+		for (x=0;x<24;x++){
 			if (x==0) gotoxy(iniX,iniY+y);
 			paintearD(terminator[numTer][y][x]);
 
