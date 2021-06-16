@@ -3,9 +3,9 @@
 #include <string.h>
 #include <windows.h>
 
-#define TDICC 80500
+#define TDICC 107715
 #define TPALABRA 24
-#define LMAX 24
+#define LMAX 20
 
 int esAnagrama(char cad1[], char cad2[])
 {
@@ -44,11 +44,14 @@ int esAnagrama(char cad1[], char cad2[])
 
 int main(){
 	
-	char diccionario[TDICC][TPALABRA];
+	char diccionario[TDICC/2][TPALABRA];
+	printf("chido");
+	char diccionario2[TDICC/2][TPALABRA];
 	
 	FILE *dicc;
 	FILE *dicc_anagramas;
-    dicc = fopen("diccionario_anagramas2.txt","rt");
+    dicc = fopen("dicc.txt","rt");
+    //dicc = fopen("diccionario_anagramas2.txt","rt");
     char c;
     int palabra = 0;
     int character = 0;
@@ -83,7 +86,7 @@ int main(){
 	
 	
 
-    dicc_anagramas = fopen("diccionario_anagrama123123s2.txt","wt");
+    dicc_anagramas = fopen("diccionario_anagrama_final.txt","wt");
 	for(palabra = 0;palabra < TDICC; palabra++){
 		printf("porcentaje: %f%% \r ", (float)palabra/TDICC * 100);
 		for(palabra2 = 0;palabra2 < TDICC; palabra2++){

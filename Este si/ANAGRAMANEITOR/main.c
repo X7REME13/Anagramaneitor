@@ -98,7 +98,7 @@ void creditos();
 int main()
 {
 	setTitle("<<< ANAGRAMANEITOR >>> By MUMP");
-	bienvenida();
+	//bienvenida();
 	do{
 	}while(menu() != 99);
 }
